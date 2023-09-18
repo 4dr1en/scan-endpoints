@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('interval');
             $table->string('status')->nullable();
             $table->timestamps();
-            $table->unique(['user_id', 'name']);
             $table->index('user_id');
         });
     }

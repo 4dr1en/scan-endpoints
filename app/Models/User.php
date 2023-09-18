@@ -44,4 +44,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get the targets monitored by the user.
+     */
+    public function targetsMonitored(){
+        return $this->hasMany(TargetsMonitored::class);
+    }
 }
