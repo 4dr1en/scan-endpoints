@@ -4,12 +4,17 @@ namespace App\Livewire;
 
 use App\Models\User;
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
+use Livewire\WithPagination;
+use Livewire\Attributes\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class EndpointList extends Component
 {
-    public $page = 1;
+    use WithPagination;
+
+    #[Rule('required|integer|min:1|max:100')]
+    public $perPage = 10;
 
     public function mount()
     {
@@ -20,21 +25,28 @@ class EndpointList extends Component
 
     public function getEndpointList()
     {
-        return Auth::user()->targetsMonitored()->paginate(10, ['*'], 'page', $this->page);
+        return Auth::user()->targetsMonitored()->paginate($this->perPage);
     }
 
     public function render()
     {
         return view('livewire.endpoint-list', [
             'endpoints' => $this->getEndpointList(),
-            'page' => $this->page,
         ]);
+    }
+
+    public function updating($property, $value)
+    {
+        if ($property === 'perpage') {
+            $this->validate();
+            $this->resetPage();
+        }
     }
 
     #[On('endpoint-created')]
     #[On('endpoint-deleted')]
     public function updateEndpointList(int $id)
     {
-        $this->page = 1;
+        $this->resetPage();
     }
 }

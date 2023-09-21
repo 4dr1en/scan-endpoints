@@ -21,9 +21,10 @@ class EndpointNew extends Component
         return view('livewire.endpoint-new');
     }
 
-    public function create(){
+    public function create()
+    {
         // Is user logged in?
-        if(!auth()->check()){
+        if (!auth()->check()) {
             return redirect()->route('login');
         }
 
@@ -40,10 +41,10 @@ class EndpointNew extends Component
                 new Validtarget(
                     $this->protocol,
                     $this->path,
-                    $this->port
+                    $this->port ?? ''
                 )
             ],
-            'port' => 'integer|min:1|max:65535|nullable',
+            'port' => 'nullable|integer|min:1|max:65535',
             'interval' => 'integer|min:1|max:1000000',
         ]);
 
@@ -53,7 +54,7 @@ class EndpointNew extends Component
             'description' => $this->description,
             'protocol' => $this->protocol,
             'path' => $this->path,
-            'port' => $this->port,
+            'port' => $this->port ?? null,
             'interval' => $this->interval,
             'status' => 'active',
         ]);
