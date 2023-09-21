@@ -65,7 +65,7 @@ class Validtarget implements ValidationRule, DataAwareRule
         fclose($connection);
 
         // Check if path exists
-        $headers = get_headers($url);
+        $headers = @get_headers($url);
         if(!$headers||
             substr($headers[0], 9, 1) === '4' ||
             substr($headers[0], 9, 1) === '5'

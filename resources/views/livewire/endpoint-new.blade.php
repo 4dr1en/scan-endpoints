@@ -31,8 +31,18 @@
                     wire:model="protocol"
                     id="protocol"
                 >
-                    <option selected value="http">HTTP</option>
-                    <option value="https">HTTPS</option>
+                    <option
+                        value="http"
+                        @if ($protocol === 'http')
+                            selected
+                        @endif
+                    >HTTP</option>
+                    <option
+                        value="https"
+                        @if ($protocol === 'https')
+                            selected
+                        @endif
+                    >HTTPS</option>
                 </select>
             </div>
             <div style="grid-column: span 3">

@@ -15,7 +15,6 @@ class EndpointNew extends Component
     public string $path = '';
     public int $port = 80;
     public int $interval = 86400;
-    private string $fullUrl = '';
 
     public function render()
     {
@@ -26,11 +25,6 @@ class EndpointNew extends Component
         // Is user logged in?
         if(!auth()->check()){
             return redirect()->route('login');
-        }
-
-        $this->fullUrl = $this->protocol . '://' . $this->path;
-        if ($this->port) {
-            $this->fullUrl .= ':' . $this->port;
         }
 
         // Validate input
@@ -61,7 +55,7 @@ class EndpointNew extends Component
             'path' => $this->path,
             'port' => $this->port,
             'interval' => $this->interval,
-            'status' => 'pending',
+            'status' => 'active',
         ]);
 
         // Emit event to update endpoints list
