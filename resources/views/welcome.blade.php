@@ -17,7 +17,7 @@
         <div>
             <h1>Test</h1>
         </div>
-        <livewire:counter/>
+
         @livewireScripts
     </body>
 </html>
