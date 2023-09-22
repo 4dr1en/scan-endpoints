@@ -13,8 +13,10 @@ class EndpointNew extends Component
     public string $description = '';
     public string $protocol = 'http';
     public string $path = '';
-    public int $port = 80;
-    public int $interval = 86400;
+    public int $port = 80; // Default portfor http
+    public int $interval = 86400; // 24 hours
+    // Validate message after endpoint creation
+    public string $flash = '';
 
     public function render()
     {
@@ -27,6 +29,8 @@ class EndpointNew extends Component
         if (!auth()->check()) {
             return redirect()->route('login');
         }
+
+        $this->flash = '';
 
         // Validate input
         $this->validate([
@@ -58,6 +62,8 @@ class EndpointNew extends Component
             'interval' => $this->interval,
             'status' => 'active',
         ]);
+
+        $this->flash = __('Endpoint created successfully!');
 
         // Emit event to update endpoints list
         $this->dispatch('endpoint-created', $endpoint->id);

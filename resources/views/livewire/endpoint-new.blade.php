@@ -30,6 +30,12 @@
                 <select
                     wire:model="protocol"
                     id="protocol"
+                    @change="
+                        if ($wire.protocol === 'https')
+                            $wire.port = 443;
+                        else if ($wire.protocol === 'http')
+                            $wire.port = 80;
+                    "
                 >
                     <option
                         value="http"
@@ -89,4 +95,12 @@
         <br>
         <button type="submit">{{__('Create')}}</button>
     </form>
+
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            @this.on('endpoint-created', (event) => {
+                @this.dispatch('notify', { message: '{{__('New taget add successfully')}}' })
+            });
+        });
+    </script>
 </div>

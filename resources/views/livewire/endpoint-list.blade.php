@@ -14,8 +14,17 @@
         <option value="10" selected>10</option>
         <option value="20">20</option>
         <option value="50">50</option>
-        <optio, value="100">100</option>
+        <option value="100">100</option>
     </select>
 
     {{ $endpoints->links('paginations/endpoints-pagination') }}
+
+    @teleport('body')
+    <dialog x-data="{ open: false, message: '' }" x-show="open" :open="open" @notify.window="open = true; message = $event.detail.message">
+        <article @click.outside="open = false">
+            <a href="#close" aria-label="Close" class="close" @click="open = false"></a>
+            <p x-text="message"></p>
+        </article>
+    </dialog>
+    @endteleport
 </div>

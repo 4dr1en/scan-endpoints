@@ -6,10 +6,7 @@
     </x-slot>
 
     <div class="py-12">
-
         <livewire:endpoint-list/>
         <livewire:endpoint-new/>
-
-        
     </div>
 </x-app-layout>
