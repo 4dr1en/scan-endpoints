@@ -3,8 +3,11 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Illuminate\Validation\Rule;
+use App\Mail\EndpointDown;
 use App\Rules\Validtarget;
+use App\Jobs\ProcessEndpoint;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Mail;
 
 
 class EndpointNew extends Component
@@ -64,6 +67,17 @@ class EndpointNew extends Component
         ]);
 
         $this->flash = __('Endpoint created successfully!');
+
+        $endpointIdentifier =
+            $endpoint->name ?:
+            ($this->protocol . '://' . $endpoint->path .( $endpoint->port ? (':' . $endpoint->port):''));
+
+        $details = [
+            'username'=>auth()->user()->display_name ?? auth()->user()->first_name,
+            'enpointIdentifier'=>$endpointIdentifier
+        ];
+
+       ProcessEndpoint::dispatch($endpoint);
 
         // Emit event to update endpoints list
         $this->dispatch('endpoint-created', $endpoint->id);
