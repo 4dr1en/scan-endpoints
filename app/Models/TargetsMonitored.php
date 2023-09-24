@@ -25,4 +25,11 @@ class TargetsMonitored extends Model
         'interval',
         'status',
     ];
+
+    public function processedTargets()
+    {
+        return $this->hasMany(
+            ProcessedTarget::class
+        );
+    }
 }

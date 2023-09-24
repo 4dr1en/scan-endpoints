@@ -28,8 +28,57 @@ class ProcessEndpoint implements ShouldQueue
      */
     public function handle(): void
     {
-        // log execution
-        Log::info('Processing endpoint ' . $this->target->endpoint);
+        // get response
+        $response = $this->testEndpoint();
 
+        // create processed target
+        $this->target->processedTargets()->create([
+            'response_code' => $response['response_code'],
+            'response_time' => $response['response_time']
+        ]);
+        
+    }
+
+    /**
+     * test if the target is up
+     */
+    private function testEndpoint(): array | false
+    {
+        $protocol = '';
+        if(
+            !$this->target->protocol
+        ){
+            $protocol = 'http://';
+        }
+        elseif($this->target->protocol === 'https' || $this->target->protocol === 'http'){
+            $protocol = $this->target->protocol . '://';
+        }
+
+        $port = '';
+        if($this->target->port){
+            $port = ':' . $this->target->port;
+        }
+
+        $url = $protocol . $this->target->path . $port;
+
+        $start = hrtime(true);
+        $headers = @get_headers($url);
+        $stop = hrtime(true);
+
+        
+        if($headers != false){
+            Log::info('Endpoint '. $this->target->name . ' (id: ' . $this->target->id . ') response time: ' . ($stop - $start) / 1e+6 . ' ms, response code: ' . $headers[0]);
+            return [
+                'response_code' => 0,
+                'response_time' => ($stop - $start) / 1e+6
+            ];
+        }
+
+        Log::warning('Endpoint '. $this->target->name . ' (id: ' . $this->target->id . ') check failed.');
+
+        return [
+            'response_code' => 0,
+            'response_time' => 0
+        ];
     }
 }
