@@ -36,7 +36,6 @@ class ProcessEndpoint implements ShouldQueue
             'response_code' => $response['response_code'],
             'response_time' => $response['response_time']
         ]);
-        
     }
 
     /**
@@ -45,17 +44,16 @@ class ProcessEndpoint implements ShouldQueue
     private function testEndpoint(): array | false
     {
         $protocol = '';
-        if(
+        if (
             !$this->target->protocol
-        ){
+        ) {
             $protocol = 'http://';
-        }
-        elseif($this->target->protocol === 'https' || $this->target->protocol === 'http'){
+        } elseif ($this->target->protocol === 'https' || $this->target->protocol === 'http') {
             $protocol = $this->target->protocol . '://';
         }
 
         $port = '';
-        if($this->target->port){
+        if ($this->target->port) {
             $port = ':' . $this->target->port;
         }
 
@@ -65,16 +63,16 @@ class ProcessEndpoint implements ShouldQueue
         $headers = @get_headers($url);
         $stop = hrtime(true);
 
-        
-        if($headers != false){
-            Log::info('Endpoint '. $this->target->name . ' (id: ' . $this->target->id . ') response time: ' . ($stop - $start) / 1e+6 . ' ms, response code: ' . $headers[0]);
+
+        if ($headers != false) {
+            Log::info('Endpoint ' . $this->target->name . ' (id: ' . $this->target->id . ') response time: ' . ($stop - $start) / 1e+6 . ' ms, response code: ' . $headers[0]);
             return [
-                'response_code' => 0,
+                'response_code' => substr($headers[0], 9, 3),
                 'response_time' => ($stop - $start) / 1e+6
             ];
         }
 
-        Log::warning('Endpoint '. $this->target->name . ' (id: ' . $this->target->id . ') check failed.');
+        Log::warning('Endpoint ' . $this->target->name . ' (id: ' . $this->target->id . ') check failed.');
 
         return [
             'response_code' => 0,

@@ -8,6 +8,7 @@ use App\Rules\Validtarget;
 use App\Jobs\ProcessEndpoint;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Mail;
+use App\Services\LaunchTargetCheckService;
 
 
 class EndpointNew extends Component
@@ -21,12 +22,16 @@ class EndpointNew extends Component
     // Validate message after endpoint creation
     public string $flash = '';
 
+    public function __construct()
+    {
+    }
+
     public function render()
     {
         return view('livewire.endpoint-new');
     }
 
-    public function create()
+    public function create(LaunchTargetCheckService $launchTargetCheckService)
     {
         // Is user logged in?
         if (!auth()->check()) {
@@ -69,15 +74,14 @@ class EndpointNew extends Component
         $this->flash = __('Endpoint created successfully!');
 
         $endpointIdentifier =
-            $endpoint->name ?:
-            ($this->protocol . '://' . $endpoint->path .( $endpoint->port ? (':' . $endpoint->port):''));
+            $endpoint->name ?: ($this->protocol . '://' . $endpoint->path . ($endpoint->port ? (':' . $endpoint->port) : ''));
 
         $details = [
-            'username'=>auth()->user()->display_name ?? auth()->user()->first_name,
-            'enpointIdentifier'=>$endpointIdentifier
+            'username' => auth()->user()->display_name ?? auth()->user()->first_name,
+            'enpointIdentifier' => $endpointIdentifier
         ];
 
-       ProcessEndpoint::dispatch($endpoint);
+        $launchTargetCheckService->launch();
 
         // Emit event to update endpoints list
         $this->dispatch('endpoint-created', $endpoint->id);
