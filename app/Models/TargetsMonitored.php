@@ -32,4 +32,11 @@ class TargetsMonitored extends Model
             ProcessedTarget::class
         );
     }
+
+    public function user()
+    {
+        return $this->belongsTo(
+            User::class
+        );
+    }
 }

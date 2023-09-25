@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Mail\EndpointDown;
 use Illuminate\Bus\Queueable;
 use App\Models\TargetsMonitored;
 use Illuminate\Support\Facades\Log;
@@ -9,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Mail;
 
 class ProcessEndpoint implements ShouldQueue
 {
@@ -31,9 +32,22 @@ class ProcessEndpoint implements ShouldQueue
         // get response
         $response = $this->testEndpoint();
 
+        $username = $this->target->user->display_name ?? $this->target->user->first_name . ' ' . $this->target->user->last_name;
+        $enpointIdentifier =
+            $this->target->name ?: ($this->target->protocol . '://' . $this->target->path . ($this->target->port ? (':' . $this->target->port) : ''));
+
+        if (!str_starts_with($response['response_code'], '2') && !str_starts_with($response['response_code'], '3')) {
+            Log::info('Endpoint ' . $enpointIdentifier . ' (id: ' . $this->target->id . ') response time: ' .  $response['response_time'] . ' ms, response code: ' . $response['response_code']);
+
+            Mail::to($this->target->user->email)->send(new EndpointDown([
+                'username' => $username,
+                'enpointIdentifier' => $enpointIdentifier
+            ]));
+        }
+
         // create processed target
         $this->target->processedTargets()->create([
-            'response_code' => $response['response_code'],
+            'response_code' => (int) $response['response_code'],
             'response_time' => $response['response_time']
         ]);
     }
@@ -65,7 +79,6 @@ class ProcessEndpoint implements ShouldQueue
 
 
         if ($headers != false) {
-            Log::info('Endpoint ' . $this->target->name . ' (id: ' . $this->target->id . ') response time: ' . ($stop - $start) / 1e+6 . ' ms, response code: ' . $headers[0]);
             return [
                 'response_code' => substr($headers[0], 9, 3),
                 'response_time' => ($stop - $start) / 1e+6
