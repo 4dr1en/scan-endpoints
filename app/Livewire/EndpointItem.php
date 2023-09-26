@@ -4,15 +4,47 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\On;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class EndpointItem extends Component
 {
     public $endpoint;
     public $flash;
     public $displayEditForm = false;
+    public $endpointStatus = '';
+    public $lastProcess;
 
     public function render()
     {
+        $this->lastProcess = $this->endpoint->processedTargets->sortByDesc('created_at')->first();
+
+        if(
+            !$this->lastProcess ||
+            // Checks if the last process is older than the date when the next process should have been run,
+            // we add 20 minutes to the next process date to give some leeway for the process to run
+            $this->lastProcess->created_at->add($this->endpoint->interval, 'second') < Carbon::now()->addMinutes(20)
+
+        ) {
+            $this->endpointStatus = 'unknown';
+        } else if(
+            str_starts_with( (string) $this->lastProcess->response_code, '3')
+        ) {
+            $this->endpointStatus = 'warning';
+        } else if (
+            str_starts_with( (string) $this->lastProcess->response_code, '2') &&
+            $this->lastProcess->response_time > 1000
+        ){
+            $this->endpointStatus = 'slow';
+        } else if(
+            str_starts_with( (string) $this->lastProcess->response_code, '2')
+        ) {
+            $this->endpointStatus = 'good';
+        } 
+        else {
+            $this->endpointStatus = 'down';
+        }
+
         return view('livewire.endpoint-item');
     }
 

@@ -1,4 +1,25 @@
 <li>
+    <span>
+        @if($endpointStatus == 'good')
+        <span class="material-symbols-outlined" style="color: green" title="{{ __('online') }}">
+            check
+        </span>
+        @elseif($endpointStatus == 'slow' || $endpointStatus == 'warning')
+        <span class="material-symbols-outlined" style="color: orange" title="{{ __('warning') }}">
+            warning
+        </span>
+        @elseif($endpointStatus == 'down')
+        <span class="material-symbols-outlined" style="color: red" title="{{ __('down') }}">
+            dangerous
+        </span>
+        @elseif($endpointStatus == 'unknown')
+        <span class="material-symbols-outlined" style="color: grey" title="{{ __('unknown') }}">
+            question_mark
+        </span>
+        @endif
+        {{ $endpointStatus }}
+    </span>
+
     <b>{{ $endpoint->name }}</b>
     -
     <span>
