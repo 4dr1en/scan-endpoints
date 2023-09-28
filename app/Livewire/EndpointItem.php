@@ -12,6 +12,8 @@ class EndpointItem extends Component
     public $endpoint;
     public $flash;
     public $displayEditForm = false;
+    public $displayDetails = false;
+    public $detailsDownloaded = false;
     public $endpointStatus = '';
     public $lastProcess;
 
@@ -19,29 +21,28 @@ class EndpointItem extends Component
     {
         $this->lastProcess = $this->endpoint->processedTargets->sortByDesc('created_at')->first();
 
-        if(
+        if (
             !$this->lastProcess ||
             // Checks if the last process is older than the date when the next process should have been run,
             // we add 20 minutes to the next process date to give some leeway for the process to run
-            $this->lastProcess->created_at->add($this->endpoint->interval, 'second') < Carbon::now()->addMinutes(20)
+            $this->lastProcess->created_at->add($this->endpoint->interval, 'second')->addMinutes(20) < Carbon::now()
 
         ) {
             $this->endpointStatus = 'unknown';
-        } else if(
-            str_starts_with( (string) $this->lastProcess->response_code, '3')
+        } else if (
+            str_starts_with((string) $this->lastProcess->response_code, '3')
         ) {
             $this->endpointStatus = 'warning';
         } else if (
-            str_starts_with( (string) $this->lastProcess->response_code, '2') &&
+            str_starts_with((string) $this->lastProcess->response_code, '2') &&
             $this->lastProcess->response_time > 1000
-        ){
+        ) {
             $this->endpointStatus = 'slow';
-        } else if(
-            str_starts_with( (string) $this->lastProcess->response_code, '2')
+        } else if (
+            str_starts_with((string) $this->lastProcess->response_code, '2')
         ) {
             $this->endpointStatus = 'good';
-        } 
-        else {
+        } else {
             $this->endpointStatus = 'down';
         }
 
@@ -64,6 +65,13 @@ class EndpointItem extends Component
         auth()->user()->targetsMonitored()->where('id', $this->endpoint->id)->delete();
 
         $this->dispatch('endpoint-deleted', $this->endpoint->id);
+    }
+
+    public function toggleDetails()
+    {
+        $this->detailsDownloaded = true;
+        $this->displayDetails = !$this->displayDetails;
+        $this->displayEditForm = false;
     }
 
     #[On('endpoint-updated')]
