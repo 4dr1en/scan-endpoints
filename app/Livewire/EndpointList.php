@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\User;
 use Livewire\Component;
+use App\Models\Workspace;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Livewire\Attributes\Rule;
@@ -13,6 +13,8 @@ class EndpointList extends Component
 {
     use WithPagination;
 
+    public Workspace $currentWorkspace;
+
     #[Rule('required|integer|min:1|max:100')]
     public $perPage = 10;
 
@@ -21,11 +23,19 @@ class EndpointList extends Component
         if (!auth()->check()) {
             return redirect()->route('login');
         }
+
+        $this->currentWorkspace = Auth::user()->workspaces()->first();
     }
 
     public function getEndpointList()
     {
-        return Auth::user()->targetsMonitored()->paginate($this->perPage);
+        // Is the user have the right to access the workspace?
+        if (!Auth::user()->workspaces->contains($this->currentWorkspace)) {
+            abort(403);
+        }
+        return $this->currentWorkspace
+            ->targetsMonitored()
+            ->paginate($this->perPage);
     }
 
     public function render()

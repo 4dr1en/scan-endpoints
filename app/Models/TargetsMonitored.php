@@ -33,10 +33,10 @@ class TargetsMonitored extends Model
         );
     }
 
-    public function user()
+    public function workspace()
     {
         return $this->belongsTo(
-            User::class
+            Workspace::class
         );
     }
 }

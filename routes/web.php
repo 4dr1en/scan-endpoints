@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TargetsMonitoredController;
+use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/targetsMonitored', [TargetsMonitoredController::class, 'index'])->name('targets-monitored.index');
+
+    Route::get('/workspace', [WorkspaceController::class, 'index'])->name('targets-monitored.workspace');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -46,9 +46,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the targets monitored by the user.
+     * Get the workspaces of the user.
      */
-    public function targetsMonitored(){
-        return $this->hasMany(TargetsMonitored::class);
+    public function workspaces()
+    {
+        return $this->belongsToMany(Workspace::class)->using(UserWorkspace::class)->withPivot('role')->withTimestamps();
     }
 }

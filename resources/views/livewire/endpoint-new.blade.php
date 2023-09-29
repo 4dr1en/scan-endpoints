@@ -99,7 +99,7 @@
     <script>
         document.addEventListener('livewire:initialized', () => {
             @this.on('endpoint-created', (event) => {
-                @this.dispatch('notify', { message: '{{__('New taget add successfully')}}' })
+                @this.dispatch('notify', { message: '{{__('New taget added successfully')}}' })
             });
         });
     </script>

@@ -3,11 +3,8 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Mail\EndpointDown;
 use App\Rules\Validtarget;
-use App\Jobs\ProcessEndpoint;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Mail;
 use App\Services\LaunchTargetCheckService;
 
 
@@ -57,7 +54,7 @@ class EndpointNew extends Component
                 )
             ],
             'port' => 'nullable|integer|min:1|max:65535',
-            'interval' => 'integer|min:1|max:1000000',
+            'interval' => 'integer|min:60|max:1000000',
         ]);
 
         // Create new endpoint
@@ -73,14 +70,7 @@ class EndpointNew extends Component
 
         $this->flash = __('Endpoint created successfully!');
 
-        $endpointIdentifier =
-            $endpoint->name ?: ($this->protocol . '://' . $endpoint->path . ($endpoint->port ? (':' . $endpoint->port) : ''));
-
-        $details = [
-            'username' => auth()->user()->display_name ?? auth()->user()->first_name,
-            'enpointIdentifier' => $endpointIdentifier
-        ];
-
+        // TODO: Only check the current endpoint
         $launchTargetCheckService->launch();
 
         // Emit event to update endpoints list

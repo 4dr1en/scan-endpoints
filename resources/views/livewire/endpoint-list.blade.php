@@ -1,10 +1,28 @@
 <div class="container">
-    <h1>List des endpoints</h1>
+
+    <div class="workspace grid">
+        <label for="workspaces">
+            {{ __('Workspace :') }}
+        </label>
+        <select name="workspaces" id="workspaces" wire:model="currentWorkspace">
+            @foreach (Auth::user()->workspaces as $workspace)
+            <option
+            value="{{ $workspace->id }}"
+            @if ($workspace->id === $currentWorkspace->id)
+                selected
+            @endif
+            >{{ $workspace->name }}</option>
+            @endforeach
+        </select>
+    </div>
+    <h1>
+        {{ __('Endpoints') }}
+    </h1>
     <ul>
         @forelse ($endpoints as $endpoint)
-        <livewire:endpoint-item :endpoint="$endpoint" :key="$endpoint->id" />
+            <livewire:endpoint-item :endpoint="$endpoint" :key="$endpoint->id" />
         @empty
-        <p>{{__('No endpoints found')}}</p>
+            <p>{{__('No endpoints found')}}</p>
         @endforelse
     </ul>
 
