@@ -4,14 +4,14 @@
         <label for="workspaces">
             {{ __('Workspace :') }}
         </label>
-        <select name="workspaces" id="workspaces" wire:model="currentWorkspace">
-            @foreach (Auth::user()->workspaces as $workspace)
-            <option
-            value="{{ $workspace->id }}"
-            @if ($workspace->id === $currentWorkspace->id)
-                selected
-            @endif
-            >{{ $workspace->name }}</option>
+        <select name="workspaces" id="workspaces" wire:model.live="workspaceId">
+            @foreach (Auth::user()->workspaces as $item)
+                <option
+                    value="{{ $item->id }}"
+                    @if ($item->id === $workspaceId)
+                        selected
+                    @endif
+                >{{ $item->name }}</option>
             @endforeach
         </select>
     </div>
@@ -20,7 +20,7 @@
     </h1>
     <ul>
         @forelse ($endpoints as $endpoint)
-            <livewire:endpoint-item :endpoint="$endpoint" :key="$endpoint->id" />
+            <livewire:endpoint-item :endpoint="$endpoint" wire:key="workspace-{{$endpoint->id}}" />
         @empty
             <p>{{__('No endpoints found')}}</p>
         @endforelse
@@ -36,6 +36,8 @@
     </select>
 
     {{ $endpoints->links('paginations/endpoints-pagination') }}
+
+    <livewire:endpoint-new :$workspace/>
 
     @teleport('body')
     <dialog x-data="{ open: false, message: '' }" x-show="open" :open="open" @notify.window="open = true; message = $event.detail.message">

@@ -5,11 +5,13 @@
             <input type="text" id="name" wire:model="name">
             @error('name') <span>{{ $message }}</span> @enderror
         </div>
+
         <div class="form-group">
             <label for="description">{{__('Workspace description')}}</label>
             <input type="text" id="description" wire:model="description">
             @error('description') <span>{{ $message }}</span> @enderror
         </div>
+
         <button type="submit">
             {{__('Create')}}
         </button>

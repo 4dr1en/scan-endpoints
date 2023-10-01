@@ -11,7 +11,7 @@ use Carbon\CarbonInterval;
 class EndpointDetails extends Component
 {
     public TargetsMonitored $endpoint;
-    public ProcessedTarget $lastCheck;
+    public ProcessedTarget|null $lastCheck;
     public Collection $history;
     public array $keys = [];
     public array $data = [];
@@ -38,9 +38,10 @@ class EndpointDetails extends Component
             ];
         });
 
-        $this->lastCheck = $this->history[
-            $this->history->count() - 1
-        ];
+        $this->lastCheck = count($this->history) > 0 ?
+            $this->history[
+                $this->history->count() - 1
+            ] : null;
 
         $this->statusReport = match ($this->endpointStatus) {
             'unknown' => __('The last check was more than :interval ago.', ['interval' => $this->interval]),

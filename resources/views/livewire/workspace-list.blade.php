@@ -1,13 +1,12 @@
 <div>
     <ul>
         @forelse($workspaces as $workspace)
-        <li>
-            {{ $workspace->name }}
-        </li>
+            <li wire:key="workspace-{{$workspace->id}}">
+                <livewire:workspace-item :$workspace wire:key="workspace-item-{{$workspace->id}}"/>
+            </li>
         @empty
             <p>{{ __('No workspaces found') }}</p>
         @endforelse
-
     </ul>
 
     @teleport('body')

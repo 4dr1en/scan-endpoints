@@ -3,13 +3,18 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\Workspace;
 use App\Rules\Validtarget;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Reactive;
+use Illuminate\Support\Facades\Log;
 use App\Services\LaunchTargetCheckService;
-
 
 class EndpointNew extends Component
 {
+    #[Reactive]
+    public Workspace $workspace;
+
     public string $name = '';
     public string $description = '';
     public string $protocol = 'http';
@@ -19,13 +24,22 @@ class EndpointNew extends Component
     // Validate message after endpoint creation
     public string $flash = '';
 
-    public function __construct()
-    {
-    }
-
     public function render()
     {
+        Log::alert('render ');
         return view('livewire.endpoint-new');
+    }
+
+    public function mount()
+    {
+        Log::alert('$this->workspace');
+        Log::alert($this->workspace);
+        Log::alert('$this->workspaceId');
+    }
+
+    public function updating($field)
+    {
+        Log::alert('toto'.$field);
     }
 
     public function create(LaunchTargetCheckService $launchTargetCheckService)
@@ -33,6 +47,17 @@ class EndpointNew extends Component
         // Is user logged in?
         if (!auth()->check()) {
             return redirect()->route('login');
+        }
+
+        // User is the owner of the workspace?
+        if (
+            !auth()->user()
+                ->workspaces()
+                ->wherePivot('role', 'owner')
+                ->where('id', $this->workspace->id)
+                ->exists()
+        ) {
+            throw new \Exception('You are not the owner of this workspace');
         }
 
         $this->flash = '';
@@ -57,16 +82,18 @@ class EndpointNew extends Component
             'interval' => 'integer|min:60|max:1000000',
         ]);
 
+        Log::alert($this->workspace->id);
         // Create new endpoint
-        $endpoint = auth()->user()->targetsMonitored()->create([
-            'name' => $this->name,
-            'description' => $this->description,
-            'protocol' => $this->protocol,
-            'path' => $this->path,
-            'port' => $this->port ?? null,
-            'interval' => $this->interval,
-            'status' => 'active',
-        ]);
+        $endpoint =
+            $this->workspace->targetsMonitoreds()->create([
+                'name' => $this->name,
+                'description' => $this->description,
+                'protocol' => $this->protocol,
+                'path' => $this->path,
+                'port' => $this->port ?? null,
+                'interval' => $this->interval,
+                'status' => 'active',
+            ]);
 
         $this->flash = __('Endpoint created successfully!');
 

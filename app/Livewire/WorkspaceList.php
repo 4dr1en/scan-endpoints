@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\On;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
 
 class WorkspaceList extends Component
@@ -13,15 +14,24 @@ class WorkspaceList extends Component
     public function render()
     {
         $this->workspaces = auth()->user()->workspaces;
-        return view('livewire.workspace-list', [
-            'workspaces' => $this->workspaces,
-        ]);
+        return view('livewire.workspace-list');
     }
 
     #[On('workspace-created')]
-    #[On('workspace-deleted')]
-    public function updateEndpointList(int $id)
+    public function updateWorkspaceList()
     {
         $this->reset();
+    }
+
+    #[On('workspace-to-delete')]
+    public function deleteWorkspace($workspaceId)
+    {
+        $workspace = auth()->user()->workspaces()->wherePivot('role', 'owner')->findOrFail($workspaceId);
+
+        if ($workspace) {
+            $workspace->delete();
+            $this->dispatch('workspace-deleted');
+            $this->reset();
+        }
     }
 }

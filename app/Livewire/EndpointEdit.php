@@ -16,7 +16,8 @@ class EndpointEdit extends Component
     public int $port;
     public int $interval;
 
-    public function mount($endpoint) {
+    public function mount($endpoint)
+    {
         $this->endpoint = $endpoint;
         $this->name = $endpoint->name;
         $this->description = $endpoint->description;
@@ -31,14 +32,22 @@ class EndpointEdit extends Component
         return view('livewire.endpoint-edit');
     }
 
-    public function update(){
+    public function update()
+    {
         // Is user logged in?
-        if(!auth()->check()){
+        if (!auth()->check()) {
             return redirect()->route('login');
         }
 
         // Is user owner of endpoint?
-        if(auth()->user()->id !== $this->endpoint->user_id){
+        if (
+            $this->endpoint
+                ->workspace()
+                ->first()
+                ->users()
+                ->where('user_id', auth()->user()->id)
+                ->count() == 0
+        ) {
             throw new \Exception('You are not allowed to edit this endpoint.');
         }
 
@@ -48,7 +57,7 @@ class EndpointEdit extends Component
             'description' => 'max:5000|nullable',
             'protocol' => 'in:http,https|nullable',
             'path' => [
-                'required', 
+                'required',
                 new Validtarget(
                     $this->protocol,
                     $this->path,

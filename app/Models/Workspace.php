@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Workspace extends Model
 {
@@ -24,13 +25,16 @@ class Workspace extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class)->using(UserWorkspace::class)->withPivot('role')->withTimestamps();
+        return $this->belongsToMany(User::class)
+            ->using(UserWorkspace::class)
+            ->withPivot('role')
+            ->withTimestamps();
     }
 
     /**
      * Get the targets of the workspace.
      */
-    public function targetsMonitored()
+    public function targetsMonitoreds()
     {
         return $this->hasMany(TargetsMonitored::class);
     }

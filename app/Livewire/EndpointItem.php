@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\TargetsMonitored;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Support\Carbon;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class EndpointItem extends Component
 {
-    public $endpoint;
+    public TargetsMonitored | null $endpoint;
     public $flash;
     public $displayEditForm = false;
     public $displayDetails = false;
@@ -19,6 +20,10 @@ class EndpointItem extends Component
 
     public function render()
     {
+        if (!$this->endpoint) {
+            return '';
+        }
+
         $this->lastProcess = $this->endpoint->processedTargets->sortByDesc('created_at')->first();
 
         if (
@@ -56,15 +61,24 @@ class EndpointItem extends Component
             return redirect()->route('login');
         }
 
-        // Is user owner of endpoint?
-        if (auth()->user()->id !== $this->endpoint->user_id) {
+        // Is user owner of endpoint workspace?
+        if (
+            !auth()->user()
+                ->workspaces()
+                ->wherePivot('role', 'owner')
+                ->where('id', $this->endpoint->workspace_id)
+                ->exists()
+        ) {
             throw new \Exception('You are not allowed to delete this endpoint.');
         }
 
         // Delete endpoint
-        auth()->user()->targetsMonitored()->where('id', $this->endpoint->id)->delete();
-
-        $this->dispatch('endpoint-deleted', $this->endpoint->id);
+        $this->endpoint->delete();
+        $this->endpoint = null;
+        
+        $this->dispatch('endpoint-deleted');
+        $this->skipRender();
+        Log::debug('Endpoint deleted');
     }
 
     public function toggleDetails()
@@ -78,8 +92,20 @@ class EndpointItem extends Component
     public function updateEndpoint(int $id)
     {
         if ($this->endpoint->id === $id) {
+            $idWorkspace =  $this->endpoint->workspace_id;
             $this->reset();
-            $this->endpoint = auth()->user()->targetsMonitored()->where('id', $id)->first();
+
+            $this->endpoint = 
+                TargetsMonitored::whereHas('workspace',
+                    function ($query) use ($idWorkspace) {
+                        $query->where('id', $idWorkspace)
+                            ->whereHas('users', function ($innerQuery) {
+                                $innerQuery->where('id', auth()->id());
+                            });
+                    }
+                )->where('id', $id)
+                ->first();
+
             $this->displayEditForm = false;
             $this->flash = __('Endpoint updated successfully.');
         }
