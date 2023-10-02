@@ -4,10 +4,11 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Rules\Validtarget;
+use App\Models\TargetsMonitored;
 
 class EndpointEdit extends Component
 {
-    public $endpoint;
+    public TargetsMonitored $endpoint;
 
     public string $name;
     public string $description;

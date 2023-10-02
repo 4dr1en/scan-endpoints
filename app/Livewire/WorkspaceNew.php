@@ -68,8 +68,6 @@ class WorkspaceNew extends Component
             ['role' => 'owner']
         );
 
-        Log::debug($workspace);
-
         $this->flash = 'Workspace created successfully!';
 
         // Emit event to update workspaces list

@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/targetsMonitored', [TargetsMonitoredController::class, 'index'])->name('targets-monitored.index');
 
-    Route::get('/workspace', [WorkspaceController::class, 'index'])->name('tooto');
+    Route::get('/workspace', [WorkspaceController::class, 'index'])->name('workspace.index');
 });
 
 require __DIR__ . '/auth.php';

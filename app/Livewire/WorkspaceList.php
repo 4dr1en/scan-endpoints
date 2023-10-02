@@ -13,7 +13,7 @@ class WorkspaceList extends Component
 
     public function render()
     {
-        $this->workspaces = auth()->user()->workspaces;
+        $this->workspaces = auth()->user()->workspaces()->get();
         return view('livewire.workspace-list');
     }
 

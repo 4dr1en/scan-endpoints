@@ -16,28 +16,21 @@ class EndpointList extends Component
 {
     use WithPagination;
 
+    #[Locked]
     public Workspace $workspace;
 
-    #[Url]
-    public $workspaceId;
+    #[Url(keep: true)]
+    public int $workspaceId;
 
     #[Rule('required|integer|min:1|max:100')]
-    public $perPage = 10;
+    public int $perPage = 10;
 
     public function mount()
     {
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-        if($this->workspaceId) {
-            $this->workspace =
-                Auth::user()
-                    ->workspaces()
-                    ->findOrFail($this->workspaceId);
-        } else {
-            $this->workspace = Auth::user()->workspaces()->first();
-            $this->workspaceId = $this->workspace->id;
-        }
+        
     }
 
     public function getEndpointList()
@@ -53,6 +46,15 @@ class EndpointList extends Component
 
     public function render()
     {
+        if(isset($this->workspaceId)) {
+            $this->workspace =
+                Auth::user()
+                    ->workspaces()
+                    ->findOrFail($this->workspaceId);
+        } else {
+            $this->workspace = Auth::user()->workspaces()->first();
+            $this->workspaceId = $this->workspace->id;
+        }
         return view('livewire.endpoint-list', [
             'endpoints' => $this->getEndpointList(),
         ]);

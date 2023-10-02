@@ -2,21 +2,22 @@
 
 namespace App\Livewire;
 
-use App\Models\TargetsMonitored;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Support\Carbon;
+use App\Models\ProcessedTarget;
+use App\Models\TargetsMonitored;
 use Illuminate\Support\Facades\Log;
 
 class EndpointItem extends Component
 {
     public TargetsMonitored | null $endpoint;
-    public $flash;
-    public $displayEditForm = false;
-    public $displayDetails = false;
-    public $detailsDownloaded = false;
-    public $endpointStatus = '';
-    public $lastProcess;
+    public string $flash;
+    public bool $displayEditForm = false;
+    public bool $displayDetails = false;
+    public bool $detailsDownloaded = false;
+    public string $endpointStatus = '';
+    public ProcessedTarget | null $lastProcess;
 
     public function render()
     {
@@ -78,7 +79,6 @@ class EndpointItem extends Component
         
         $this->dispatch('endpoint-deleted');
         $this->skipRender();
-        Log::debug('Endpoint deleted');
     }
 
     public function toggleDetails()
