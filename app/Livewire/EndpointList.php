@@ -23,6 +23,7 @@ class EndpointList extends Component
     public int $workspaceId;
 
     #[Rule('required|integer|min:1|max:100')]
+    #[Url]
     public int $perPage = 10;
 
     public function mount()
@@ -30,7 +31,6 @@ class EndpointList extends Component
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-        
     }
 
     public function getEndpointList()
