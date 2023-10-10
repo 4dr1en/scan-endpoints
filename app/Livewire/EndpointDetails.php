@@ -3,10 +3,10 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Carbon\CarbonInterval;
 use App\Models\ProcessedTarget;
 use App\Models\TargetsMonitored;
 use Illuminate\Database\Eloquent\Collection;
-use Carbon\CarbonInterval;
 
 class EndpointDetails extends Component
 {
@@ -30,7 +30,7 @@ class EndpointDetails extends Component
 
     public function render()
     {
-        $this->history = $this->endpoint->processedTargets()->orderBy('created_at', 'desc')->get();
+        $this->history = $this->endpoint->processedTargets()->orderBy('created_at')->get();
         $this->history->each(function ($item, $key) {
             $this->data[] = [
                 'date' => $item->created_at->format('Y-m-d H:i:s'),

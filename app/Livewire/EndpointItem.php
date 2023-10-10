@@ -24,7 +24,7 @@ class EndpointItem extends Component
             return '';
         }
 
-        $this->lastProcess = $this->endpoint->processedTargets->sortByDesc('created_at')->first();
+        $this->lastProcess = $this->endpoint->processedTargets->sortBy('created_at')->last();
 
         if (
             !$this->lastProcess ||
