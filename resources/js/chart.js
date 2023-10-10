@@ -64,7 +64,6 @@ function buildLineChart(canvas, data) {
                                 label += ": ";
                             }
                             if (context.parsed.y !== null) {
-                                console.log(context);
                                 label += ' ' + context.parsed.y + " ms";
                             }
                             return label;
