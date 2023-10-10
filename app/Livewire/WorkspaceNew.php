@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\Rule;
-use Illuminate\Support\Facades\Log;
 use App\Rules\WorkspaceNameUniqueForUser;
 
 class WorkspaceNew extends Component

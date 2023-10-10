@@ -16,7 +16,6 @@ class EndpointList extends Component
 {
     use WithPagination;
 
-    #[Locked]
     public Workspace $workspace;
 
     #[Url(keep: true)]

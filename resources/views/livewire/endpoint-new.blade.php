@@ -1,5 +1,5 @@
 <div class="container">
-    <h2>{{__('Create a new entry')}} {{$workspace->id}}</h2>
+    <h2>{{__('Create a new entry')}}</h2>
     <form
         wire:submit.prevent="create"
     >
@@ -87,7 +87,7 @@
             wire:model="interval"
             id="interval"
         >
-            <option value="1800">{{__('Every 30 minute')}}</option>
+            <option value="1800">{{__('Every 30 minutes')}}</option>
             <option value="3600">{{__('Every 1 hour')}}</option>
             <option value="86400" selected>{{__('Every 1 day')}}</option>
             <option value="259200">{{__('Every 3 days')}}</option>

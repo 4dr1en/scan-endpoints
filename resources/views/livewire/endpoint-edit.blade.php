@@ -71,10 +71,11 @@
             wire:model="interval"
             id="interval"
         >
-            <option value="3600">{{__('Every 1 hour')}}</option>
-            <option value="86400" selected>{{__('Every 1 day')}}</option>
-            <option value="259200">{{__('Every 3 days')}}</option>
-            <option value="604800">{{__('Every 1 week')}}</option>
+            <option value="1800" @if($interval == 1800) selected @endif>{{__('Every 30 minutes')}}</option>
+            <option value="3600" @if($interval == 3600) selected @endif>{{__('Every 1 hour')}}</option>
+            <option value="86400" @if($interval == 86400) selected @endif>{{__('Every 1 day')}}</option>
+            <option value="259200" @if($interval == 259200) selected @endif>{{__('Every 3 days')}}</option>
+            <option value="604800" @if($interval == 604800) selected @endif>{{__('Every 1 week')}}</option>
         </select>
         <br>
         <button type="submit">{{__('Update')}}</button>

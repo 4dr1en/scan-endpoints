@@ -7,7 +7,6 @@ use Livewire\Attributes\On;
 use Illuminate\Support\Carbon;
 use App\Models\ProcessedTarget;
 use App\Models\TargetsMonitored;
-use Illuminate\Support\Facades\Log;
 
 class EndpointItem extends Component
 {

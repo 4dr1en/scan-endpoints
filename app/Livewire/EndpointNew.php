@@ -7,7 +7,6 @@ use App\Models\Workspace;
 use App\Rules\Validtarget;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Reactive;
-use Illuminate\Support\Facades\Log;
 use App\Services\LaunchTargetCheckService;
 
 class EndpointNew extends Component
@@ -26,20 +25,7 @@ class EndpointNew extends Component
 
     public function render()
     {
-        Log::alert('render ');
         return view('livewire.endpoint-new');
-    }
-
-    public function mount()
-    {
-        Log::alert('$this->workspace');
-        Log::alert($this->workspace);
-        Log::alert('$this->workspaceId');
-    }
-
-    public function updating($field)
-    {
-        Log::alert('toto'.$field);
     }
 
     public function create(LaunchTargetCheckService $launchTargetCheckService)
@@ -82,7 +68,6 @@ class EndpointNew extends Component
             'interval' => 'integer|min:60|max:1000000',
         ]);
 
-        Log::alert($this->workspace->id);
         // Create new endpoint
         $endpoint =
             $this->workspace->targetsMonitoreds()->create([
