@@ -6,6 +6,7 @@ use Livewire\Component;
 use Carbon\CarbonInterval;
 use App\Models\ProcessedTarget;
 use App\Models\TargetsMonitored;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
 
 class EndpointDetails extends Component
@@ -18,7 +19,7 @@ class EndpointDetails extends Component
     public string $interval;
     public string $endpointStatus;
     public string $statusReport;
-
+    public bool $showChartZoomAdvice = false;
 
     public function mount()
     {
@@ -42,6 +43,10 @@ class EndpointDetails extends Component
             $this->history[
                 $this->history->count() - 1
             ] : null;
+
+        $firstDate = $this->history[0]->created_at;
+        $lastDate = $this->lastCheck->created_at;
+        $this->showChartZoomAdvice = $firstDate->diffInDays($lastDate) > 3;
 
         $this->statusReport = match ($this->endpointStatus) {
             'unknown' => __('The last check was more than :interval ago.', ['interval' => $this->interval]),

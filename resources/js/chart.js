@@ -128,7 +128,7 @@ function buildLineChart(canvas, data) {
                     label: "Response time",
                     data: formattedData,
                     fill: false,
-                    borderColor: "rgb(75, 192, 192)",
+                    borderColor: colors,
                     segment: {
                         borderColor: (ctx) => {
                             const p1 = ctx.p0.parsed.y;

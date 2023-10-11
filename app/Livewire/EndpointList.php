@@ -74,7 +74,6 @@ class EndpointList extends Component
         }
 
         if ($property === 'workspaceId') {
-            Log::alert("workspaceId update");
             $this->workspace =
                 Auth::user()
                     ->workspaces()
