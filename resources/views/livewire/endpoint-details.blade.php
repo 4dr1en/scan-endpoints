@@ -53,6 +53,10 @@
                 x-ref="historyChart"
                 wire:ignore
             ></canvas>
+            <p>{!! __(
+                'Use :key to select part of the chart.',
+                ['key' => '<kbd>ctrl + click</kbd>']
+            ) !!}</p>
         @endif
     </div>
 </div>

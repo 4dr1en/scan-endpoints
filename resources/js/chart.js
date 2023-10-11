@@ -6,8 +6,9 @@ import {
     LinearScale,
     TimeScale,
     Tooltip,
-} from 'chart.js';
+} from "chart.js";
 import "chartjs-adapter-date-fns";
+import zoomPlugin from "chartjs-plugin-zoom";
 
 Chart.register(
     LineElement,
@@ -15,7 +16,8 @@ Chart.register(
     LineController,
     LinearScale,
     TimeScale,
-    Tooltip
+    Tooltip,
+    zoomPlugin
 );
 
 function buildLineChart(canvas, data) {
@@ -26,8 +28,9 @@ function buildLineChart(canvas, data) {
         y: item.ping,
     }));
 
-    const haveMoreThanTreeDays = 
-        (new Date(data[data.length - 1].date) - new Date(data[0].date)) > 3 * 24 * 60 * 60 * 1000;
+    const haveMoreThanTreeDays =
+        new Date(data[data.length - 1].date) - new Date(data[0].date) >
+        3 * 24 * 60 * 60 * 1000;
 
     const config = {
         type: "line",
@@ -41,6 +44,7 @@ function buildLineChart(canvas, data) {
                 },
                 y: {
                     min: 0,
+                    suggestedMax: formattedData.reduce((max, item) => Math.max(max, item.y), 0)*1.1,
                 },
             },
             transitions: {
@@ -64,7 +68,7 @@ function buildLineChart(canvas, data) {
                                 label += ": ";
                             }
                             if (context.parsed.y !== null) {
-                                label += ' ' + context.parsed.y + " ms";
+                                label += " " + context.parsed.y + " ms";
                             }
                             return label;
                         },
@@ -80,7 +84,43 @@ function buildLineChart(canvas, data) {
                         weight: 700,
                     },
                 },
-            }
+                zoom : {
+                    pan: {
+                        enabled: true,
+                        mode: 'x',
+                        speed: 10,
+                        threshold: 10,
+                    },
+                    limits: {
+                        x: {
+                            min: formattedData[0].x - 1000 * 60 * 60,
+                            max: formattedData[formattedData.length - 1].x + 1000 * 60 * 60,
+                            minRange: 1000 * 60 * 60 * 3,
+                        },
+                        y: {
+                            min: 0,
+                            max: formattedData.reduce((max, item) => Math.max(max, item.y), 0)*1.1,
+                        },
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                            speed: 0.1,
+                        },
+                        drag: {
+                            enabled: true,
+                            modifierKey: 'ctrl',
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'x',
+                        scallMode: 'xy',
+                        speed: 0.1,
+                        threshold: 2,
+                    }
+                }
+            },
         },
         data: {
             datasets: [
@@ -88,9 +128,9 @@ function buildLineChart(canvas, data) {
                     label: "Response time",
                     data: formattedData,
                     fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
+                    borderColor: "rgb(75, 192, 192)",
                     segment: {
-                        borderColor: ctx => {
+                        borderColor: (ctx) => {
                             const p1 = ctx.p0.parsed.y;
                             const p2 = ctx.p1.parsed.y;
                             const color1 = getColor(p1);
@@ -105,7 +145,7 @@ function buildLineChart(canvas, data) {
                             gradient.addColorStop(1, color2);
 
                             return gradient;
-                        }
+                        },
                     },
                     borderWidth: 2,
                     pointRadius: 4,
@@ -122,14 +162,14 @@ function buildLineChart(canvas, data) {
 
 function getColor(value) {
     if (value < 250) {
-        return 'hsl(180, 48%, 52%)';  // Starting cyanish color
+        return "hsl(180, 48%, 52%)"; // Starting cyanish color
     } else if (value >= 700) {
-        return 'hsl(0, 70%, 60%)';  // Ending red color
+        return "hsl(0, 70%, 60%)"; // Ending red color
     } else {
         let ratio = (value - 250) / (700 - 250);
-        let hue = 180 - 180 * ratio;  // Transition from the cyanish hue (180) to red (0)
+        let hue = 180 - 180 * ratio; // Transition from the cyanish hue (180) to red (0)
         let saturation = 48 + 22 * ratio; // Linearly increase saturation from 48 to 70
-        let lightness = 52 + 8 * ratio;   // Linearly increase lightness from 52 to 60
+        let lightness = 52 + 8 * ratio; // Linearly increase lightness from 52 to 60
         return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     }
 }

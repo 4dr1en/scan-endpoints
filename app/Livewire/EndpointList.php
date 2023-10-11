@@ -8,7 +8,6 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\Attributes\Rule;
-use Livewire\Attributes\Locked;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,6 +28,13 @@ class EndpointList extends Component
     {
         if (!auth()->check()) {
             return redirect()->route('login');
+        }
+        else if(
+            Auth::user()
+                ->workspaces()
+                ->doesntExist()
+        ) {
+            return $this->redirectRoute('workspace.index');
         }
     }
 
@@ -54,6 +60,7 @@ class EndpointList extends Component
             $this->workspace = Auth::user()->workspaces()->first();
             $this->workspaceId = $this->workspace->id;
         }
+
         return view('livewire.endpoint-list', [
             'endpoints' => $this->getEndpointList(),
         ]);
