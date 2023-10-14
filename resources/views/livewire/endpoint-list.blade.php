@@ -17,7 +17,7 @@
 
     <ul class="endpoints__list">
         @forelse ($endpoints as $endpoint)
-            <div x-data="{ show: false }" x-show="show" x-init="setTimeout(() => { show = true }, (30 * {{ $loop->index }}))" x-transition.duration.100>
+            <div x-data="{ show: false }" x-show="show" x-init="setTimeout(() => { show = true }, (60 * {{ $loop->index }}))" x-transition.duration.200.ease>
                 <livewire:endpoint-item :endpoint="$endpoint" wire:key="workspace-{{ $endpoint->id }}" />
             </div>
         @empty
