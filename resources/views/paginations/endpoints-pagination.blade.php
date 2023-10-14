@@ -1,7 +1,7 @@
 <div>
     @if ($paginator->hasPages())
-        <nav role="navigation" aria-label="Pagination Navigation">
-            <span>
+        <nav role="navigation" aria-label="Pagination Navigation" class="paginator">
+            <span class="paginator-previous">
                 @if ($paginator->onFirstPage())
                     <span>Previous</span>
                 @else
@@ -9,35 +9,38 @@
                 @endif
             </span>
 
-			<span class="grid container">
-				@foreach ($elements as $element)
-					{{-- "Three Dots" Separator --}}
-					@if (is_string($element))
-						<span aria-disabled="true">
-							<span class="">{{ $element }}</span>
-						</span>
-					@endif
+            <span class="paginator-pages">
+                @foreach ($elements as $element)
+                    {{-- "Three Dots" Separator --}}
+                    @if (is_string($element))
+                        <span aria-disabled="true">
+                            <span class="">{{ $element }}</span>
+                        </span>
+                    @endif
 
-					{{-- Array Of Links --}}
-					@if (is_array($element))
-						@foreach ($element as $page => $url)
-							<span wire:key="paginator-{{ $paginator->getPageName() }}-page{{ $page }}">
-								@if ($page == $paginator->currentPage())
-									<span aria-current="page">
-										<span class="">{{ $page }}</span>
-									</span>
-								@else
-									<button type="button" wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')" class="" aria-label="{{ __('Go to page :page', ['page' => $page]) }}">
-										{{ $page }}
-									</button>
-								@endif
-							</span>
-						@endforeach
-					@endif
-				@endforeach
-			</span>
- 
-            <span>
+                    {{-- Array Of Links --}}
+                    @if (is_array($element))
+                        @foreach ($element as $page => $url)
+                            <span wire:key="paginator-{{ $paginator->getPageName() }}-page{{ $page }}">
+                                @if ($page == $paginator->currentPage())
+                                    <span aria-current="page" class="paginator-page">
+                                        <span class="">{{ $page }}</span>
+                                    </span>
+                                @else
+                                    <button type="button"
+                                        wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')"
+                                        class="paginator-page"
+                                        aria-label="{{ __('Go to page :page', ['page' => $page]) }}">
+                                        {{ $page }}
+                                    </button>
+                                @endif
+                            </span>
+                        @endforeach
+                    @endif
+                @endforeach
+            </span>
+
+            <span class="paginator-next">
                 @if ($paginator->onLastPage())
                     <span>Next</span>
                 @else

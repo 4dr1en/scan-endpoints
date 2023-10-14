@@ -1,0 +1,27 @@
+.paginator  {
+	display: flex;
+	justify-content: center;
+	align-items: baseline;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.paginator-pages {
+	display: flex;
+	justify-content: center;
+	align-items: baseline;
+}
+
+.paginator-page,
+.paginator-previous button,
+.paginator-next button {
+	padding: var(--form-element-spacing-vertical) var(--form-element-spacing-horizontal);
+	background: none;
+	border: 0;
+}
+
+button.paginator-page ,
+.paginator-previous button,
+.paginator-next button {
+	text-decoration: solid underline;
+}
