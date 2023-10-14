@@ -11,12 +11,12 @@ use App\Models\TargetsMonitored;
 class EndpointItem extends Component
 {
     public TargetsMonitored | null $endpoint;
+    public ProcessedTarget | null $lastProcess;
     public string $flash;
     public bool $displayEditForm = false;
     public bool $displayDetails = false;
     public bool $detailsDownloaded = false;
     public string $endpointStatus = '';
-    public ProcessedTarget | null $lastProcess;
 
     public function render()
     {

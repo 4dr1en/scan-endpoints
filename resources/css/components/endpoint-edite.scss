@@ -1,0 +1,45 @@
+@use '@sass/abstracts/struct' as struct;
+
+.endpoint-edit {
+	padding-top: 1.5rem;
+}
+
+.endpoint-edit__title {
+	font-size: 1.3rem;
+	font-weight: 600;
+	margin-top: 1.2rem;
+	margin-bottom: 2rem;
+}
+
+.endpoint-edit__target {
+	@media screen and (min-width: struct.$tablet-portrait) {
+		display: grid;
+		grid-template-columns: 150px 1fr 150px;
+		align-items: end;
+	}
+}
+.endpoint-edit__target-protocol select,
+.endpoint-edit__target-path input,
+.endpoint-edit__target-port input {
+	height: calc(1rem 
+		* var(--line-height)
+		+ var(--form-element-spacing-vertical)
+		* 2 + var(--border-width) * 2);
+}
+
+
+.endpoint-edit__target-protocol select {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+	border-right: 0;
+}
+
+.endpoint-edit__target-path input {
+	border-radius: 0;
+}
+
+.endpoint-edit__target-port input {
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	border-left: 0;
+}
