@@ -1,0 +1,55 @@
+.endpoint-details {
+	padding-top: 1.5rem;
+}
+
+.endpoint-details .endpoint-details__status-report p {
+	font-size: 1.2rem;
+	color: var(--error);
+}
+
+.endpoint-details__status-report--good p {
+	color: var(--valid);
+}
+
+.endpoint-details__status-report--warning p,
+.endpoint-details__status-report--slow p {
+	color: var(--warning);
+}
+
+.endpoint-details__status-report + hr {
+	margin-bottom: 1.2rem;
+}
+
+.endpoint-details p {
+	margin-bottom: 1.2rem;
+}
+
+.endpoint-details b {
+	padding-right: 0.3rem;
+	font-weight: 600;
+	font-size: 1.1rem;
+}
+
+.endpoint-details__description {
+	b {
+		display: block;
+		margin-bottom: 0.3rem;
+	}
+}
+
+.endpoint-details__graph {
+	margin-top: 1.2rem;
+	margin-bottom: 3rem;
+}
+
+.endpoint-details .endpoint-details__graph-title {
+	font-size: 1.3rem;
+	font-weight: 600;
+	margin-top: 1.2rem;
+	margin-bottom: 2rem;
+}
+
+.endpoint-details__bottom-separator {
+	border-color: var(--muted-color);
+	margin-bottom: 2rem;
+}

@@ -1,0 +1,146 @@
+@use '@sass/abstracts/struct';
+
+.endpoint {
+	list-style: none;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: baseline;
+	margin-bottom: 1.3rem;
+	gap: 0.3rem;
+
+	@media screen and (min-width: struct.$tablet-portrait) {
+		grid-template-columns: 2.5rem auto auto 1fr auto;
+	}
+	
+	@media screen and (min-width: struct.$tablet-landscape) {
+		margin-bottom: 0.5rem;
+		gap: 0;
+	}
+}
+
+.endpoint__status-icon {
+	> span {
+		font-size: 1.4rem;
+		transform: translateY(0.2rem);
+	}
+
+	> span[title="Online"]{
+		font-size: 1.7rem;
+		transform: translateY(0.3rem);
+	}
+}
+
+.endpoint__name--exist {
+	font-size: 1.4rem;
+	font-weight: 700;
+	margin-right: 0.5rem;
+}
+
+.endpoint__target {
+	display: flex;
+	grid-column: 1 / -1;
+	font-size: 1.1rem;
+	font-style: italic;
+	align-items: baseline;
+	color: var(--muted-color);
+
+	@media screen and (min-width: struct.$tablet-portrait) {
+		grid-column: initial;
+	}
+}
+
+.endpoint__path {
+	color: var(--contrast);
+}
+
+.endpoint__port {
+	font-size: 0.7em;
+}
+
+.endpoint__name--missing {
+	display: none;
+
+	@media screen and (min-width: struct.$tablet-portrait) {
+		display: block;
+	}
+}
+
+.endpoint__name--missing + .endpoint__target {
+	grid-column: initial;
+	font-size: 1.3rem;
+	font-weight: 700;
+}
+
+.endpoint__actions {
+	display: grid;
+	grid-column: 1 / -1;
+	justify-content: flex-start;
+	gap: 0.6rem;
+	grid-template-columns: auto auto auto;
+
+	@media screen and (min-width: struct.$tablet-landscape) {
+		grid-column: initial;
+		justify-self: flex-end;
+	}
+
+	button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 0;
+		padding: 0;
+		width: 2.5rem;
+		height: 2.5rem;
+		background-color: var(--background);
+		border: 1px solid var(--primary);
+		transition: all var(--transition);
+
+		span {
+			position: absolute;
+			color: var(--primary);
+			font-size: 1.25rem;
+			line-height: 1;
+			transition : color 0.2s var(--transition);
+		}
+
+		&:hover {
+			border-color: var(--primary-hover);
+
+			span {
+				color: var(--primary-hover);
+			}
+		}
+	}
+
+	.endpoint__display-btn[aria-checked="true"],
+	.endpoint__edite-btn[aria-checked="true"] {
+		background-color: var(--primary);
+
+		span {
+			color: var(--secondary-inverse);
+		}
+	}
+}
+
+.endpoint__actions .endpoint__delete-btn {
+
+	border-color: var(--danger);
+
+	span {
+		color: var(--danger);
+		
+	}
+
+	&:hover {
+		border-color: var(--danger-hover);
+
+		span {
+			color: var(--danger-hover);
+		}
+	}
+}
+
+.endpoint__details,
+.endpoint__edite-form {
+	grid-column: 1 / -1;
+}

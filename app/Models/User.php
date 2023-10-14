@@ -44,4 +44,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get the workspaces of the user.
+     */
+    public function workspaces()
+    {
+        return $this->belongsToMany(Workspace::class)->using(UserWorkspace::class)->withPivot('role')->withTimestamps();
+    }
 }

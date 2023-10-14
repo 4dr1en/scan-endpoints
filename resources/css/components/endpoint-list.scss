@@ -1,0 +1,33 @@
+.endpoints__title {
+	margin-bottom: 1.3rem;
+}
+
+.endpoints__workspace-selection {
+	display: flex;
+	justify-content: flex-end;
+	align-items: baseline;
+	gap: 0.8rem;
+	font-size: 0.9rem;
+}
+
+.endpoints__workspace-selection select {
+	width: auto;
+	font-size: 0.8rem;
+	padding: 0.5rem 0.7rem;
+	padding-right: 3rem;
+}
+
+.endpoints__perpage {
+	display: flex;
+	justify-content: flex-start;
+	align-items: baseline;
+	gap: 0.8rem;
+	font-size: 0.9rem;
+}
+
+.endpoints__perpage select {
+	width: auto;
+	font-size: 0.8rem;
+	padding: 0.5rem 0.7rem;
+	padding-right: 3rem;
+}

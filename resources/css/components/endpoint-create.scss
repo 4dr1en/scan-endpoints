@@ -1,0 +1,13 @@
+@use '@sass/abstracts/struct' as struct;
+
+.endpoint-create {
+	padding-top: 1.5rem;
+	margin-bottom: 5rem;
+}
+
+.endpoint-create__title {
+	font-size: 1.3rem;
+	font-weight: 600;
+	margin-top: 1.2rem;
+	margin-bottom: 2rem;
+}

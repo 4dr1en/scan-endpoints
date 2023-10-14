@@ -1,0 +1,9 @@
+@forward './endpoint-list';
+@forward './endpoint-item';
+@forward './endpoint-details';
+@forward './endpoint-edite';
+@forward './endpoint-create';
+@forward './pagination';
+
+/// forms
+@forward './forms/form-endpoint';
