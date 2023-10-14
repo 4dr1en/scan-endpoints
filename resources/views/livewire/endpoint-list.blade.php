@@ -1,8 +1,8 @@
-<div class="container">
+<div class="endpoints container">
 
-    <div class="workspace grid">
+    <div class="endpoints__workspace-selection">
         <label for="workspaces">
-            {{ __('Workspace :') }}
+            {{ __('Current workspace :') }}
         </label>
         <select name="workspaces" id="workspaces" wire:model.live="workspaceId">
             @foreach (Auth::user()->workspaces as $item)
@@ -11,13 +11,13 @@
             @endforeach
         </select>
     </div>
-    <h1>
+    <h1 class="endpoints__title">
         {{ __('Endpoints') }}
     </h1>
 
-    <ul>
+    <ul class="endpoints__list">
         @forelse ($endpoints as $endpoint)
-            <div x-data="{ show: false }" x-show="show" x-init="setTimeout(() => { show = true }, (50 * {{ $loop->index }}))" x-transition.duration.100>
+            <div x-data="{ show: false }" x-show="show" x-init="setTimeout(() => { show = true }, (30 * {{ $loop->index }}))" x-transition.duration.100>
                 <livewire:endpoint-item :endpoint="$endpoint" wire:key="workspace-{{ $endpoint->id }}" />
             </div>
         @empty
@@ -25,13 +25,15 @@
         @endforelse
     </ul>
 
-    <label for="perpage">{{ __('Items per page') }}</label>
-    <select name="perPage" id="perpage" wire:model.live="perPage">
-        <option value="10" selected>10</option>
-        <option value="20">20</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-    </select>
+    <div class="endpoints__perpage">
+        <select name="perPage" id="perpage" wire:model.live="perPage">
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        <label for="perpage">{{ __('Items per page') }}</label>
+    </div>
 
     {{ $endpoints->links('paginations/endpoints-pagination') }}
 
