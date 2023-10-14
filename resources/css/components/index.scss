@@ -4,6 +4,8 @@
 @forward './endpoint-edite';
 @forward './endpoint-create';
 @forward './pagination';
+@forward './workspace-list';
+@forward './workspace-item';
 
 /// forms
 @forward './forms/form-endpoint';
