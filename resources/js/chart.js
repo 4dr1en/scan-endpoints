@@ -131,18 +131,34 @@ function buildLineChart(canvas, data) {
                     borderColor: colors,
                     segment: {
                         borderColor: (ctx) => {
-                            const p1 = ctx.p0.parsed.y;
-                            const p2 = ctx.p1.parsed.y;
-                            const color1 = getColor(p1);
-                            const color2 = getColor(p2);
+                            // The parsed coordinates are the coordinates related to the chart not the data.
+                            const x1 = ctx.p0.parsed.x;
+                            const y1 = ctx.p0.parsed.y;
+                            const x2 = ctx.p1.parsed.x;
+                            const y2 = ctx.p1.parsed.y;
+
+                            const color1 = getColor(y1);
+                            const color2 = getColor(y2);
+
                             const gradient = ctx.chart.ctx.createLinearGradient(
                                 ctx.p0.x,
                                 ctx.p0.y,
                                 ctx.p1.x,
                                 ctx.p1.y
                             );
-                            gradient.addColorStop(0, color1);
-                            gradient.addColorStop(1, color2);
+                            
+                            // If one single point is above 700
+                            if ((y1 < 700 && y2 > 700) || (y2 < 700 && y1 > 700)) 
+                            {
+                                // Compute gradient position based on both x and y coordinates
+                                const gradientPosition = computeGradientPosition(x1, y1, x2, y2);
+                                gradient.addColorStop(0, color1);
+                                gradient.addColorStop(gradientPosition, 'rgb(255, 0, 0)'); // Red at the 700 point
+                                gradient.addColorStop(1, color2);
+                            } else {
+                                gradient.addColorStop(0, color1);
+                                gradient.addColorStop(1, color2);
+                            }
 
                             return gradient;
                         },
@@ -160,18 +176,48 @@ function buildLineChart(canvas, data) {
     new Chart(canvas, config);
 }
 
+/**
+ * Get the color based on the ping value.
+ * @param {number} the value of the ping
+ * @returns 
+ */
 function getColor(value) {
     if (value < 250) {
-        return "hsl(180, 48%, 52%)"; // Starting cyanish color
+        return "rgb(0, 255, 255)"; // Starting cyanish color
     } else if (value >= 700) {
-        return "hsl(0, 70%, 60%)"; // Ending red color
+        return "rgb(255, 0, 0)"; // Ending red color
     } else {
         let ratio = (value - 250) / (700 - 250);
-        let hue = 180 - 180 * ratio; // Transition from the cyanish hue (180) to red (0)
-        let saturation = 48 + 22 * ratio; // Linearly increase saturation from 48 to 70
-        let lightness = 52 + 8 * ratio; // Linearly increase lightness from 52 to 60
-        return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        let r = Math.round(255 * ratio); // Transition from 0 (cyan) to 255 (red)
+        let g = Math.round(255 - 255 * ratio); // Transition from 255 (cyan) to 0 (red)
+        let b = Math.round(255 - 255 * ratio); // Transition from 255 (cyan) to 0 (red)
+        return `rgb(${r}, ${g}, ${b})`;
     }
+}
+
+/**
+ * Calculate the position in the line of the Y position.
+ * 
+ * @param {number} x1 
+ * @param {number} y1 
+ * @param {number} x2 
+ * @param {number} y2 
+ * @returns {number} The position of 700 in the line between 0 and 1
+ */
+function computeGradientPosition(x1, y1, x2, y2) {
+    if (y1 === y2) return 0.5;  // If the y-values are the same, the gradient position is just the midpoint
+
+    // Compute the slope of the line
+    const slope = (y2 - y1) / (x2 - x1);
+
+    // Compute the y-intercept of the line
+    const yIntercept = y1 - slope * x1;
+
+    // Compute the x-position of the 700 point
+    const x700 = (700 - yIntercept) / slope;
+
+    // Compute the position of the 700 point in the line
+    return (x700 - x1) / (x2 - x1);
 }
 
 window.buildLineChart = buildLineChart;
