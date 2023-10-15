@@ -68,22 +68,11 @@ class WorkspaceItem extends Component
             'description' => $this->editDescription,
         ]);
 
-        // Refresh the workspace to get the pivot data
-        $this->workspace = auth()->user()
-            ->workspaces()
-            ->where('id', $this->workspace->id)
-            ->withPivot('role')
-            ->first();
-        $this->workspace->refresh();
-        //Log::debug('update'.$this->workspace);
-        
-
         $this->editName = $this->workspace->name;
         $this->editDescription = $this->workspace->description;
         $this->openEdit = false;
 
         $this->dispatch('workspace-updated');
-        $this->render();
     }
 
     public function updated()
