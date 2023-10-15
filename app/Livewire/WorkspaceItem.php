@@ -11,6 +11,9 @@ class WorkspaceItem extends Component
 {
     public Workspace $workspace;
 
+    // Role of the current user in the workspace
+    public string $role;
+
     #[Rule(['required', 'max:255'])]
     public string $editName;
 
@@ -46,7 +49,7 @@ class WorkspaceItem extends Component
         return view('livewire.workspace-item');
     }
 
-    public function update()
+    public function updateWorkspace()
     {
         if (
             !auth()->user()
@@ -66,12 +69,25 @@ class WorkspaceItem extends Component
         ]);
 
         // Refresh the workspace to get the pivot data
-        $this->workspace = auth()->user()->workspaces()->where('id', $this->workspace->id)->first();
+        $this->workspace = auth()->user()
+            ->workspaces()
+            ->where('id', $this->workspace->id)
+            ->withPivot('role')
+            ->first();
+        $this->workspace->refresh();
+        //Log::debug('update'.$this->workspace);
+        
+
         $this->editName = $this->workspace->name;
         $this->editDescription = $this->workspace->description;
         $this->openEdit = false;
 
         $this->dispatch('workspace-updated');
         $this->render();
+    }
+
+    public function updated()
+    {
+        //Log::debug('updated: '.$this->workspace);
     }
 }

@@ -28,7 +28,7 @@
                 {{ __('Authorisation:') }}
             </b>
             <p>
-                {{ $workspace->pivot->role }}
+                {{ $role }}
             </p>
         </div>
     </div>
@@ -42,7 +42,7 @@
         </a>
 
 
-        @if ($workspace->pivot->role === 'owner')
+        @if ($role === 'owner')
             <button @click="$wire.openEdit = true" class="workspace__edit-btn" aria-label="{{ __('Edit') }}"
                 title="{{ __('Edit') }}">
                 <span class="material-symbols-outlined" x-transition.duration.300ms>
@@ -59,12 +59,12 @@
         @endif
     </div>
 
-    @if ($workspace->pivot->role === 'owner')
+    @if ($role === 'owner')
         <dialog x-show="$wire.openEdit" class="workspace-edit" open="">
             <article @click.outside="$wire.openEdit = false">
                 <a href="#close" aria-label="{{ __('Cancel') }}" class="close" @click="$wire.openEdit = false"></a>
 
-                <form wire:submit.prevent="update">
+                <form wire:submit.prevent="updateWorkspace">
                     <label for="name">
                         {{ __('Name:') }}
                     </label>
@@ -86,7 +86,7 @@
             document.addEventListener('livewire:initialized', function() {
                 @this.on('workspace-updated', () => {
                     @this.dispatch('notify', {
-                        message: '{{ __('New workspace updated successfully') }}'
+                        message: '{{ __('Workspace updated successfully') }}'
                     })
                     @this.set('openEdit', false);
                 });
