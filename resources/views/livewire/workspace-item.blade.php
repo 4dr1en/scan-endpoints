@@ -60,7 +60,7 @@
     </div>
 
     @if ($role === 'owner')
-        <dialog x-show="$wire.openEdit" class="workspace-edit" open="">
+        <dialog x-show="$wire.openEdit" class="workspace-edit" open="" x-cloak>
             <article @click.outside="$wire.openEdit = false">
                 <a href="#close" aria-label="{{ __('Cancel') }}" class="close" @click="$wire.openEdit = false"></a>
 
@@ -74,7 +74,7 @@
                         {{ __('Description:') }}
                     </label>
                     <textarea id="description" wire:model="editDescription"></textarea>
-
+                    <br>
                     <button type="submit">
                         {{ __('Update') }}
                     </button>
