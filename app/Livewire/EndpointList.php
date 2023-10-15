@@ -66,7 +66,11 @@ class EndpointList extends Component
 
         $this->workspace->targetsMonitoreds->each(function ($target) {
             $lastCheck = $target->processedTargets()->latest()->first();
-            if ($lastCheck && ($lastCheck->response_code !== 200 && $lastCheck->response_code !== 300)) {
+
+            if (
+                $lastCheck && 
+                !preg_match('/^2|3/', (string) $lastCheck->response_code)
+            ) {
                 $this->haveEndpointDown = true;
             }
         });
