@@ -66,10 +66,15 @@ class Validtarget implements ValidationRule, DataAwareRule
 
         // Check if path exists
         $headers = @get_headers($url);
-        if(!$headers||
+        if(!$headers ||
             substr($headers[0], 9, 1) === '4' ||
             substr($headers[0], 9, 1) === '5'
         ){
+            if($headers && substr($headers[0], 9, 3) === '403'){
+                $fail('The target must accept our HEAD requests (error 403).');
+                return;
+            }
+
             $fail('The ' . $attribute . ' must exist and be reachable (error '. substr($headers[0], 9, 3).').');
             return;
         }
