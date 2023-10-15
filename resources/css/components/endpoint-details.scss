@@ -7,12 +7,12 @@
 	color: var(--error);
 }
 
-.endpoint-details__status-report--good p {
+.endpoint-details .endpoint-details__status-report--good p {
 	color: var(--valid);
 }
 
-.endpoint-details__status-report--warning p,
-.endpoint-details__status-report--slow p {
+.endpoint-details .endpoint-details__status-report--warning p,
+.endpoint-details .endpoint-details__status-report--slow p {
 	color: var(--warning);
 }
 
