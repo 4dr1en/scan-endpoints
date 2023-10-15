@@ -16,6 +16,10 @@
 	color: var(--warning);
 }
 
+.endpoint-details .endpoint-details__status-report--unknown p {
+	color: var(--fade);
+}
+
 .endpoint-details__status-report + hr {
 	margin-bottom: 1.2rem;
 }
@@ -47,6 +51,15 @@
 	font-weight: 600;
 	margin-top: 1.2rem;
 	margin-bottom: 2rem;
+}
+
+.endpoint-details__graph-tip {
+	padding-top: 1.3rem;
+	font-size: 0.8em;
+
+	kbd {
+		margin-inline: 0.25rem;
+	}
 }
 
 .endpoint-details__bottom-separator {

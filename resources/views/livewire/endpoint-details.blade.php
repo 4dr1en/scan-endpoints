@@ -49,7 +49,7 @@
         @if ($history->count() > 0)
             <canvas id="historyChart" x-ref="historyChart" wire:ignore></canvas>
             @if ($showChartZoomAdvice)
-                <p>{!! __('Use :key to select part of the chart.', ['key' => '<kbd>ctrl + click</kbd>']) !!}</p>
+                <p class="endpoint-details__graph-tip">{!! __('Use :key to select part of the chart.', ['key' => '<kbd>ctrl + click</kbd>']) !!}</p>
             @endif
         @endif
     </div>
