@@ -25,9 +25,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/targetsMonitored', [TargetsMonitoredController::class, 'index'])->name('targets-monitored.index');
+    Route::get('/targets', [TargetsMonitoredController::class, 'index'])->name('targets-monitored.index');
 
-    Route::get('/workspace', [WorkspaceController::class, 'index'])->name('workspace.index');
+    Route::get('/workspaces', [WorkspaceController::class, 'index'])->name('workspace.index');
 });
 
 require __DIR__ . '/auth.php';
