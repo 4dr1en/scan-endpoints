@@ -27,12 +27,14 @@ class WorkspaceList extends Component
     #[On('workspace-to-delete')]
     public function deleteWorkspace($workspaceId)
     {
-        $workspace = auth()->user()->workspaces()->wherePivot('role', 'owner')->findOrFail($workspaceId);
+        $workspace = auth()->user()
+            ->workspaces()
+            ->wherePivot('role', 'owner')
+            ->findOrFail($workspaceId);
 
         if ($workspace) {
             $workspace->delete();
-            $this->dispatch('workspace-deleted');
-            $this->reset();
+            $this->dispatch('notify', __('Workspace deleted successfully.'));
         }
     }
 }

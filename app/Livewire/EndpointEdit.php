@@ -79,6 +79,8 @@ class EndpointEdit extends Component
             'interval' => $this->interval,
         ]);
 
+        // Ask to udpate the endpoint in the list
         $this->dispatch('endpoint-updated', $this->endpoint->id);
+        $this->dispatch('notify', __('Endpoint updated successfully!'));
     }
 }

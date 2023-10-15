@@ -5,7 +5,6 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Workspace;
 use Livewire\Attributes\Rule;
-use Illuminate\Support\Facades\Log;
 
 class WorkspaceItem extends Component
 {
@@ -72,11 +71,6 @@ class WorkspaceItem extends Component
         $this->editDescription = $this->workspace->description;
         $this->openEdit = false;
 
-        $this->dispatch('workspace-updated');
-    }
-
-    public function updated()
-    {
-        //Log::debug('updated: '.$this->workspace);
+        $this->dispatch('notify', __('Workspace updated!'));
     }
 }

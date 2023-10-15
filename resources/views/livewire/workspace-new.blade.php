@@ -20,14 +20,4 @@
             {{ __('Create') }}
         </button>
     </form>
-
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            @this.on('workspace-created', (event) => {
-                @this.dispatch('notify', {
-                    message: '{{ __('New workspace added successfully') }}'
-                })
-            });
-        });
-    </script>
 </div>

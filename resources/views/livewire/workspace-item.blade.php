@@ -81,16 +81,5 @@
                 </form>
             </article>
         </dialog>
-
-        <script>
-            document.addEventListener('livewire:initialized', function() {
-                @this.on('workspace-updated', () => {
-                    @this.dispatch('notify', {
-                        message: '{{ __('Workspace updated successfully') }}'
-                    })
-                    @this.set('openEdit', false);
-                });
-            })
-        </script>
     @endif
 </div>
