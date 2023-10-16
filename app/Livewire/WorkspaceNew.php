@@ -14,8 +14,6 @@ class WorkspaceNew extends Component
     #[Rule('max:5000')]
     public string $description = '';
 
-    // Validate message after workspace creation
-    public string $flash = '';
 
     public function render()
     {
@@ -45,8 +43,6 @@ class WorkspaceNew extends Component
 
     public function create()
     {
-        $this->flash = '';
-
         // Do the user is authentified
         if (!auth()->check()) {
             return redirect()->route('login');
@@ -62,13 +58,12 @@ class WorkspaceNew extends Component
         $data = $this->validate();
 
         // Create workspace and define the user as the owner
-        $workspace = auth()->user()->workspaces()->create(
+        auth()->user()->workspaces()->create(
             $data,
             ['role' => 'owner']
         );
 
-        $this->flash = 'Workspace created successfully!';
-
+        $this->dispatch('notify', __('Workspace created successfully.'));
         // Emit event to update workspaces list
         $this->dispatch('workspace-created');
     }

@@ -12,7 +12,6 @@ class EndpointItem extends Component
 {
     public TargetsMonitored | null $endpoint;
     public ProcessedTarget | null $lastProcess;
-    public string $flash;
     public bool $displayEditForm = false;
     public bool $displayDetails = false;
     public bool $detailsDownloaded = false;
@@ -54,6 +53,9 @@ class EndpointItem extends Component
         return view('livewire.endpoint-item');
     }
 
+    /**
+     * User wants to delet the endpoint
+     */
     public function delete()
     {
         // Is user logged in?
@@ -77,9 +79,13 @@ class EndpointItem extends Component
         $this->endpoint = null;
         
         $this->dispatch('endpoint-deleted');
+        $this->dispatch('notify', __('Endpoint deleted successfully!'));
         $this->skipRender();
     }
 
+    /**
+     * Toggle the details dropdown
+     */
     public function toggleDetails()
     {
         $this->detailsDownloaded = true;
@@ -87,6 +93,9 @@ class EndpointItem extends Component
         $this->displayEditForm = false;
     }
 
+    /**
+     * An endpoint has been updated
+     */
     #[On('endpoint-updated')]
     public function updateEndpoint(int $id)
     {
@@ -106,7 +115,6 @@ class EndpointItem extends Component
                 ->first();
 
             $this->displayEditForm = false;
-            $this->flash = __('Endpoint updated successfully.');
         }
     }
 }

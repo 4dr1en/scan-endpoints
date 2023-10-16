@@ -20,8 +20,6 @@ class EndpointNew extends Component
     public string $path = '';
     public int $port = 80; // Default portfor http
     public int $interval = 86400; // 24 hours
-    // Validate message after endpoint creation
-    public string $flash = '';
 
     public function render()
     {
@@ -46,8 +44,6 @@ class EndpointNew extends Component
             throw new \Exception('You are not the owner of this workspace');
         }
 
-        $this->flash = '';
-
         // Validate input
         $this->validate([
             'name' => 'max:255|min:3|nullable',
@@ -69,23 +65,20 @@ class EndpointNew extends Component
         ]);
 
         // Create new endpoint
-        $endpoint =
-            $this->workspace->targetsMonitoreds()->create([
-                'name' => $this->name,
-                'description' => $this->description,
-                'protocol' => $this->protocol,
-                'path' => $this->path,
-                'port' => $this->port ?? null,
-                'interval' => $this->interval,
-                'status' => 'active',
-            ]);
-
-        $this->flash = __('Endpoint created successfully!');
+        $this->workspace->targetsMonitoreds()->create([
+            'name' => $this->name,
+            'description' => $this->description,
+            'protocol' => $this->protocol,
+            'path' => $this->path,
+            'port' => $this->port ?? null,
+            'interval' => $this->interval,
+            'status' => 'active',
+        ]);
 
         // TODO: Only check the current endpoint
         $launchTargetCheckService->launch();
 
-        // Emit event to update endpoints list
-        $this->dispatch('endpoint-created', $endpoint->id);
+        $this->dispatch('endpoint-created');
+        $this->dispatch('notify', __('Endpoint created successfully!'));
     }
 }

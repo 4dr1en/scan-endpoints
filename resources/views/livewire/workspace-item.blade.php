@@ -1,67 +1,85 @@
-<div>
-    <h2>
-        {{ $workspace->name }}
-    </h2>
-
+<div class="workspace">
     <div>
-        <p>
-            {{ __('Description:') }}
-        </p>
-        <p>
-            {{ $workspace->description ?? __('No description') }}
-        </p>
+        <h2 class="workspace__title">
+            {{ $workspace->name }}
+        </h2>
+
+        <div class="workspace__description">
+            <b>
+                {{ __('Description:') }}
+            </b>
+            <p>
+                {{ $workspace->description ?? __('No description') }}
+            </p>
+        </div>
+
+
+        <div class="workspace__date-creation">
+            <b>
+                {{ __('Created at:') }}
+            </b>
+            <p>
+                {{ $workspace->created_at->format('Y-m-d H:i:s') }}
+            </p>
+        </div>
+
+        <div class="workspace__authorisation">
+            <b>
+                {{ __('Authorisation:') }}
+            </b>
+            <p>
+                {{ $role }}
+            </p>
+        </div>
     </div>
 
+    <div class="grid workspace__actions">
+        <a href="{{ route('targets-monitored.index', ['workspaceId' => $workspace->id]) }}"
+            aria-label="{{ __('Show') }}" title="{{ __('Show') }}" class="workspace__show-btn">
+            <span class="material-symbols-outlined">
+                visibility
+            </span>
+        </a>
 
-    <div>
-        {{ __('Created at:') }}
-        {{ $workspace->created_at->format('Y-m-d H:i:s') }}
-    </div>
 
-    <div>
-        {{ __('Authorisation:') }}
-        {{ $workspace->pivot->role }}
-    </div>
+        @if ($role === 'owner')
+            <button @click="$wire.openEdit = true" class="workspace__edit-btn" aria-label="{{ __('Edit') }}"
+                title="{{ __('Edit') }}">
+                <span class="material-symbols-outlined" x-transition.duration.300ms>
+                    edit
+                </span>
+            </button>
 
-    <a href="{{ route('targets-monitored.index', ['workspaceId' => $workspace->id]) }}">
-        {{ __('Show') }}
-    </a>
-
-    @if ($workspace->pivot->role === 'owner')
-        <div class="grid">
-            <button @click.once="
-                @this.dispatch('workspace-to-delete', {workspaceId:{{ $workspace->id }}})
+            <button aria-label="{{ __('Delete') }}" title="{{ __('Delete') }}" class="workspace__delete-btn"
+                @click.once="
+                    @this.dispatch('workspace-to-delete', {workspaceId:{{ $workspace->id }}})
             ">
-                {{ __('Delete') }}
+                <span class="material-symbols-outlined">delete_forever</span>
             </button>
-            <button @click="$wire.openEdit = !$wire.openEdit">
-                {{ __('Edit') }}
-            </button>
-        </div>
+        @endif
+    </div>
 
-        <div x-show="$wire.openEdit">
-            <form wire:submit.prevent="update">
-                <label for="name">
-                    {{ __('Name:') }}
-                </label>
-                <input type="text" id="name" wire:model="editName">
+    @if ($role === 'owner')
+        <dialog x-show="$wire.openEdit" class="workspace-edit" open="" x-cloak>
+            <article @click.outside="$wire.openEdit = false">
+                <a href="#close" aria-label="{{ __('Cancel') }}" class="close" @click="$wire.openEdit = false"></a>
 
-                <label for="description">
-                    {{ __('Description:') }}
-                </label>
-                <textarea id="description" wire:model="editDescription"></textarea>
+                <form wire:submit.prevent="updateWorkspace">
+                    <label for="name">
+                        {{ __('Name:') }}
+                    </label>
+                    <input type="text" id="name" wire:model="editName">
 
-                <button type="submit">
-                    {{ __('Update') }}
-                </button>
-            </form>
-        </div>
-        <script>
-            document.addEventListener('livewire:initialized', function () {
-                @this.on('workspace-updated', () => {
-                    @this.dispatch('notify', { message: '{{__('New workspace updated successfully')}}' })
-                });
-            })
-        </script>
+                    <label for="description">
+                        {{ __('Description:') }}
+                    </label>
+                    <textarea id="description" wire:model="editDescription"></textarea>
+                    <br>
+                    <button type="submit">
+                        {{ __('Update') }}
+                    </button>
+                </form>
+            </article>
+        </dialog>
     @endif
 </div>

@@ -63,4 +63,5 @@
         <br>
         <button type="submit">{{ __('Update') }}</button>
     </form>
+    <hr class="endpoint-edit__bottom-separator">
 </div>

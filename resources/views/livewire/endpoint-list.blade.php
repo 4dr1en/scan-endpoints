@@ -17,7 +17,7 @@
 
     <ul class="endpoints__list">
         @forelse ($endpoints as $endpoint)
-            <div x-data="{ show: false }" x-show="show" x-init="setTimeout(() => { show = true }, (30 * {{ $loop->index }}))" x-transition.duration.100>
+            <div x-data="{ show: false }" x-show="show" x-init="setTimeout(() => { show = true }, (60 * {{ $loop->index }}))" x-transition.duration.200.ease>
                 <livewire:endpoint-item :endpoint="$endpoint" wire:key="workspace-{{ $endpoint->id }}" />
             </div>
         @empty
@@ -39,13 +39,25 @@
 
     <livewire:endpoint-new :$workspace />
 
-    @teleport('body')
-        <dialog x-data="{ open: false, message: '' }" x-show="open" :open="open"
-            @notify.window="open = true; message = $event.detail.message">
-            <article @click.outside="open = false">
-                <a href="#close" aria-label="Close" class="close" @click="open = false"></a>
-                <p x-text="message"></p>
-            </article>
-        </dialog>
-    @endteleport
+    <script>
+        document.addEventListener('livewire:initialized', ($wire) => {
+            console.log(@this.get('haveEndpointDown'));
+            let link = document.querySelector("link[rel~='icon']");
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.head.appendChild(link);
+            }
+
+            if (@this.get('haveEndpointDown')) {
+                // set a green icon to the favicon
+                link.href =
+                    'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❗</text></svg>';
+            } else {
+                // set a red icon to the favicon
+                link.href =
+                    'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✅</text></svg>';
+            }
+        })
+    </script>
 </div>

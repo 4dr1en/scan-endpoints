@@ -64,14 +64,4 @@
         <br>
         <button type="submit">{{ __('Create') }}</button>
     </form>
-
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            @this.on('endpoint-created', (event) => {
-                @this.dispatch('notify', {
-                    message: '{{ __('New taget added successfully') }}'
-                })
-            });
-        });
-    </script>
 </div>

@@ -1,0 +1,10 @@
+@use '@sass/abstracts/struct' as struct;
+
+.workspace-list {
+	display: grid;
+	gap: var(--block-spacing-horizontal) var(--block-spacing-vertical);
+
+	@media screen and (min-width: struct.$tablet-portrait) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}

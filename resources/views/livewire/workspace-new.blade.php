@@ -1,4 +1,5 @@
 <div class="workspace-create">
+    <h2 class="workspace-create__title">{{ __('Create a new workspace') }}</h2>
     <form wire:submit.prevent="create" class="workspace-form">
         <div class="workspace-form__name">
             <label for="name">{{ __('Workspace title') }}</label>
@@ -10,24 +11,15 @@
 
         <div class="workspace-form__description">
             <label for="description">{{ __('Workspace description') }}</label>
-            <input type="text" id="description" wire:model="description">
+            <textarea type="text" id="description" wire:model="description">
+            </textarea>
             @error('description')
                 <span>{{ $message }}</span>
             @enderror
         </div>
-
+        <br>
         <button type="submit">
             {{ __('Create') }}
         </button>
     </form>
-
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            @this.on('workspace-created', (event) => {
-                @this.dispatch('notify', {
-                    message: '{{ __('New workspace added successfully') }}'
-                })
-            });
-        });
-    </script>
 </div>

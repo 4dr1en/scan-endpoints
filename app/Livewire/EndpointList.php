@@ -20,6 +20,8 @@ class EndpointList extends Component
     #[Url(keep: true)]
     public int $workspaceId;
 
+    public bool $haveEndpointDown = false;
+
     #[Rule('required|integer|min:1|max:100')]
     #[Url]
     public int $perPage = 10;
@@ -60,6 +62,18 @@ class EndpointList extends Component
             $this->workspace = Auth::user()->workspaces()->first();
             $this->workspaceId = $this->workspace->id;
         }
+
+
+        $this->workspace->targetsMonitoreds->each(function ($target) {
+            $lastCheck = $target->processedTargets()->latest()->first();
+
+            if (
+                $lastCheck && 
+                !preg_match('/^2|3/', (string) $lastCheck->response_code)
+            ) {
+                $this->haveEndpointDown = true;
+            }
+        });
 
         return view('livewire.endpoint-list', [
             'endpoints' => $this->getEndpointList(),

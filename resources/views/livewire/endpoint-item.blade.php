@@ -85,24 +85,4 @@
             <livewire:endpoint-details :$endpoint :$endpointStatus :key="'details' . $endpoint->id" />
         </div>
     @endif
-
-    <script>
-        {{--
-            When a Target is updated or deleted, we dispatch the local
-            event across the frontend to notify the user.
-        --}}
-        document.addEventListener('livewire:initialized', () => {
-            @this.on('endpoint-deleted', (event) => {
-                @this.dispatch('notify', {
-                    message: '{{ __('Deleted successfully') }}'
-                })
-            });
-
-            @this.on('endpoint-updated', (event) => {
-                @this.dispatch('notify', {
-                    message: '{{ __('Updated successfully') }}'
-                })
-            });
-        });
-    </script>
 </li>

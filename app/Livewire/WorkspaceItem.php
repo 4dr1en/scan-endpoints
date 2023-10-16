@@ -5,11 +5,13 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Workspace;
 use Livewire\Attributes\Rule;
-use Illuminate\Support\Facades\Log;
 
 class WorkspaceItem extends Component
 {
     public Workspace $workspace;
+
+    // Role of the current user in the workspace
+    public string $role;
 
     #[Rule(['required', 'max:255'])]
     public string $editName;
@@ -46,7 +48,7 @@ class WorkspaceItem extends Component
         return view('livewire.workspace-item');
     }
 
-    public function update()
+    public function updateWorkspace()
     {
         if (
             !auth()->user()
@@ -65,13 +67,10 @@ class WorkspaceItem extends Component
             'description' => $this->editDescription,
         ]);
 
-        // Refresh the workspace to get the pivot data
-        $this->workspace = auth()->user()->workspaces()->where('id', $this->workspace->id)->first();
         $this->editName = $this->workspace->name;
         $this->editDescription = $this->workspace->description;
         $this->openEdit = false;
 
-        $this->dispatch('workspace-updated');
-        $this->render();
+        $this->dispatch('notify', __('Workspace updated!'));
     }
 }

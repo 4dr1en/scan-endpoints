@@ -1,0 +1,8 @@
+// dark light
+@media (prefers-color-scheme: light) {
+  :root {
+	--background-overlay: #e9f0f7;
+	--border-section: #d8dde2;
+	--section-inner: #f1f4f7;
+  }
+}
