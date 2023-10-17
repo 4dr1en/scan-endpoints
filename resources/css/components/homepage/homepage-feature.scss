@@ -1,0 +1,67 @@
+@use '@sass/abstracts/struct' as struct;
+
+.homepage-feature {
+	min-height: 100vh;
+	min-height: 100dvh;
+	max-width: 100%;
+	margin: 0;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+
+	hgroup {
+		padding: 2rem;
+		max-width: 40rem;
+		margin-bottom: 0;
+	}
+}
+
+.homepage-feature__title {
+	font-size: calc(1.3rem + 1vw);
+	text-wrap: balance;
+	margin-bottom: 2.6rem;
+	background-image: var(--glorious-gradient);
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+}
+
+.homepage-feature__description {
+	font-size: calc(1.2rem + 0.8vw);
+	text-wrap: balance;
+	line-height: 1.4;
+	font-weight: 400;
+	color: var(--contrast-second);
+}
+
+.homepage-feature__image {
+	width: 100%;
+	max-width: calc(100% - 4rem);
+	height: auto;
+}
+
+@media screen and (min-width: struct.$tablet-portrait) {
+	.homepage-feature__image {
+		max-width: 70%;
+	}
+}
+
+@media screen and (min-width: struct.$tablet-landscape) {
+	.homepage-feature {
+		flex-direction: row;
+	}
+
+	.homepage-feature--reverse {
+		flex-direction: row-reverse;
+	}
+
+	.homepage-feature hgroup {
+		width: 40%;
+	}
+
+	.homepage-feature__image {
+		width: 30%;
+	}
+}

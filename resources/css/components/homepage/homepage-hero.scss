@@ -1,0 +1,32 @@
+.homepage-hero {
+	display: grid;
+	/* Padding bottom for the scale effect */
+	grid-template-rows: 3fr 1fr;
+	max-width: 100%;
+	
+	h1 {
+		width: fit-content;
+		max-width: 40rem;
+		padding-top: 10dvh;
+		padding-inline: 2rem;
+		font-size: calc(1.5rem + 4vw);
+		font-weight: 700;
+		line-height: 1.2;
+		text-wrap: balance;
+		font-family: var(--font-family);		
+		background-image: var(--glorious-gradient);
+		background-clip: text;
+		-webkit-background-clip: text;
+		color: transparent;
+		user-select: none;
+	}
+}
+
+.homepage-hero__wrapper {
+	min-height: 100vh;
+	min-height: 100dvh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}

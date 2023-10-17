@@ -8,6 +8,11 @@
 @forward './workspace-item';
 @forward './workspace-create';
 
+/// homepage
+@forward './homepage/homepage-hero';
+@forward './homepage/homepage-feature';
+@forward './homepage/homepage-cta';
+
 /// forms
 @forward './forms/form-endpoint';
 @forward './forms/form-user';
