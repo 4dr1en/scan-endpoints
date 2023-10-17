@@ -41,7 +41,6 @@
 
     <script>
         document.addEventListener('livewire:initialized', ($wire) => {
-            console.log(@this.get('haveEndpointDown'));
             let link = document.querySelector("link[rel~='icon']");
             if (!link) {
                 link = document.createElement('link');

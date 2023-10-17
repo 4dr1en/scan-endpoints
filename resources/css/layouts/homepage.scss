@@ -1,0 +1,54 @@
+@use '@sass/abstracts/struct' as struct;
+
+html, body {
+	scroll-behavior: smooth;
+}
+
+.homepage-header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 10;
+}
+
+.homepage-navigation {
+	display: flex;
+	justify-content: flex-end;
+	padding-top: 15px;
+}
+
+.homepage-navigation__list {
+	display: flex;
+	list-style: none;
+	gap: 2rem;
+}
+
+.homepage-navigation__item a {
+	background-color: var(--primary);
+	background: radial-gradient(circle, var(--primary) 0%, var(--primary) 100%);
+	color: #fff;
+	height: 46px;
+	border-radius: 23px;
+	padding-left: 1.1rem;
+	padding-right: 1.1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.2s ease, text-decoration 0.2s ease;
+
+	&:hover {
+		background: radial-gradient(circle, var(--primary-hover) 0%, var(--primary) 100%); 
+	}
+}
+
+
+.homepage-navigation__item--secondary a {
+	background: var(--background);
+	color: var(--contrast);
+
+	&:hover {
+		background: var(--background);
+		text-decoration: underline solid var(--contrast);
+	}
+}

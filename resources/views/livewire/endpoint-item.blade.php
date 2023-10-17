@@ -43,9 +43,9 @@
             </button>
         @else
             <button @click="$wire.displayDetails = !$wire.displayDetails; $wire.displayEditForm=false"
-                :aria-label="$wire.displayDetails ? '{{ __('Hide details') }}' : '{{ __('Show details') }}'"
+                :aria-label="$wire.displayDetails ? `{{ __('Hide details') }}` : `{{ __('Show details') }}`"
                 role="switch" :aria-checked="$wire.displayDetails"
-                :title="$wire.displayDetails ? '{{ __('Hide details') }}' : '{{ __('Show details') }}'"
+                :title="$wire.displayDetails ? `{{ __('Hide details') }}` : `{{ __('Show details') }}`"
                 class="endpoint__display-btn">
                 <span class="material-symbols-outlined" x-show="!$wire.displayDetails" x-transition.duration.300ms>
                     info
@@ -59,9 +59,9 @@
             the server only to toggle a form. Therefor, when the user submits
             the form, we call the server to update the endpoint. --}}
         <button @click="$wire.displayEditForm = !$wire.displayEditForm; $wire.displayDetails=false"
-            :aria-label="$wire.displayEditForm ? '{{ __('Cancel edit') }}' : '{{ __('Edit') }}'" role="switch"
+            :aria-label="$wire.displayEditForm ? `{{ __('Cancel edit') }}` : `{{ __('Edit') }}`" role="switch"
             :aria-checked="$wire.displayEditForm"
-            :title="$wire.displayEditForm ? '{{ __('Cancel edit') }}' : '{{ __('Edit') }}'"
+            :title="$wire.displayEditForm ? `{{ __('Cancel edit') }}` : `{{ __('Edit') }}`"
             class="endpoint__edite-btn">
             <span class="material-symbols-outlined" x-show="!$wire.displayEditForm" x-transition.duration.300ms>
                 edit
