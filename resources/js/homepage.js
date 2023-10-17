@@ -1,7 +1,6 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Observer } from "gsap/Observer";
-import { set } from "date-fns";
 
 gsap.registerPlugin(ScrollTrigger, Observer);
 
@@ -19,9 +18,8 @@ addEventListener('DOMContentLoaded', () => {
 			ease: 'power2.out',
 		});
 	});
+
 	setTimeout(() => {
-		console.log('test');
-		console.log($title);
 		$title.textContent = text;
 	}, (text.length * 1000 * 0.5 + 2000)/10);
 
