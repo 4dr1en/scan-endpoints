@@ -36,16 +36,16 @@ class ProcessEndpoint implements ShouldQueue
         // get response
         $response = $this->testEndpoint();
 
-        // notify user if endpoint is down
-        if (!str_starts_with($response['response_code'], '2') && !str_starts_with($response['response_code'], '3')) {
-            $this->notifyUsers($response);
-        }
-
         // create processed target
         $this->target->processedTargets()->create([
             'response_code' => (int) $response['response_code'],
             'response_time' => $response['response_time'],
         ]);
+
+        // notify user if endpoint is down
+        if (!str_starts_with($response['response_code'], '2') && !str_starts_with($response['response_code'], '3')) {
+            $this->notifyUsers($response);
+        }
     }
 
     /**
@@ -91,9 +91,9 @@ class ProcessEndpoint implements ShouldQueue
     private function notifyUsers($response): void
     {
         Log::info('Endpoint ' . $this->endpointIdentifier . ' (id: ' . $this->target->id . ') response time: ' . $response['response_time'] . ' ms, response code: ' . $response['response_code']);
-
-        $this->target->workspace()->users()->get()->each(function ($user) {
-            $username = $this->target->user->display_name ?? $this->target->user->first_name . ' ' . $this->target->user->last_name;
+        // Get all users of the workspace of the target and send them an email
+        $this->target->workspace->users->each(function ($user) {
+            $username = $user->display_name ?? $user->first_name . ' ' . $user->last_name;
             Mail::to($user->email)->send(new EndpointDown([
                 'username' => $username,
                 'enpointIdentifier' => $this->endpointIdentifier,
