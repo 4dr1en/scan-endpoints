@@ -11,7 +11,8 @@
         "laravel/horizon": "^5.21",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
-        "livewire/livewire": "^3.0"
+        "livewire/livewire": "^3.0",
+        "mailersend/laravel-driver": "^2.3"
     },
     "require-dev": {
         "bestmomo/laravel5-artisan-language": "^0.3.4",
