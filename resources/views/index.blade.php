@@ -10,7 +10,7 @@
         <hgroup>
             <h2 class="homepage-feature__title">{{ __('Never miss a broken endpoint again.') }}</h2>
             <p class="homepage-feature__description">
-                {{ __('Scan endpoint is a simple tool to keep track of your endpoints. It will notify you when an endpoint is broken.') }}
+                {{ __('Upcheckr is a simple tool to keep track of your endpoints. It will notify you when an endpoint is broken.') }}
             </p>
         </hgroup>
         <img src="{{ asset('img/homepage1.png') }}" alt="" class="homepage-feature__image">

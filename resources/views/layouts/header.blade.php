@@ -2,7 +2,7 @@
     <div class="app-header__wrapper">
         <div>
             <a href="/">
-                Scan endpoint
+                upcheckr.io
             </a>
         </div>
         <div class="app-header__greeting">
