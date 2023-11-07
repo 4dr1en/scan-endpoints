@@ -82,12 +82,15 @@ class EndpointList extends Component
 
     public function updating($property, $value)
     {
+        
+
         if ($property === 'perpage') {
             $this->validate();
             $this->resetPage();
         }
 
         if ($property === 'workspaceId') {
+            $this->resetPage();
             $this->workspace =
                 Auth::user()
                     ->workspaces()
