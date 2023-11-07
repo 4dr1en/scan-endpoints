@@ -82,8 +82,6 @@ class EndpointList extends Component
 
     public function updating($property, $value)
     {
-        
-
         if ($property === 'perpage') {
             $this->validate();
             $this->resetPage();
