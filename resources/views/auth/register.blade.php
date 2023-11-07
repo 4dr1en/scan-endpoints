@@ -3,7 +3,7 @@
         @csrf
 
         <!-- First name -->
-        <div>
+        <div class="register__firstname">
             <x-input-label for="first_name" :value="__('First Name')" />
             <x-text-input id="first_name" class="" type="text" name="first_name" :value="old('first_name')" required
                 autofocus autocomplete="first_name" />
@@ -11,7 +11,7 @@
         </div>
 
         <!-- Last name -->
-        <div>
+        <div class="register__lastname">
             <x-input-label for="last_name" :value="__('Last Name')" />
             <x-text-input id="last_name" class="" type="text" name="last_name" :value="old('last_name')" required
                 autofocus autocomplete="last_name" />

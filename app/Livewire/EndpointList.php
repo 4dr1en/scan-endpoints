@@ -88,6 +88,7 @@ class EndpointList extends Component
         }
 
         if ($property === 'workspaceId') {
+            $this->resetPage();
             $this->workspace =
                 Auth::user()
                     ->workspaces()

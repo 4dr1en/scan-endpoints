@@ -18,7 +18,7 @@
             <div>
                 <h1>
                     <a href="/">
-                        Scan endpoint
+                        upcheckr.io
                     </a>
                 </h1>
             </div>

@@ -2,12 +2,13 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Workspace;
+use App\Rules\NoDuplicateEndpointOnWorkspace;
 use App\Rules\Validtarget;
+use App\Services\LaunchTargetCheckService;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Reactive;
-use App\Services\LaunchTargetCheckService;
+use Livewire\Component;
 
 class EndpointNew extends Component
 {
@@ -54,11 +55,8 @@ class EndpointNew extends Component
             ],
             'path' => [
                 'required',
-                new Validtarget(
-                    $this->protocol,
-                    $this->path,
-                    $this->port ?? ''
-                )
+                new Validtarget(),
+                new NoDuplicateEndpointOnWorkspace()
             ],
             'port' => 'nullable|integer|min:1|max:65535',
             'interval' => 'integer|min:60|max:1000000',

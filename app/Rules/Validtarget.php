@@ -3,8 +3,9 @@
 namespace App\Rules;
 
 use Closure;
-use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Validation\DataAwareRule;
+use Illuminate\Contracts\Validation\ValidationRule;
 
 class Validtarget implements ValidationRule, DataAwareRule
 {
@@ -34,7 +35,7 @@ class Validtarget implements ValidationRule, DataAwareRule
             $port = ':' . $this->data['port'];
         }
 
-         $url = $protocol . $this->data['path'] . $port;
+        $url = $protocol . $this->data['path'] . $port;
 
         if(!filter_var($url, FILTER_VALIDATE_URL)){
             $fail('1-The ' . $attribute . ' must be a valid URL.');
@@ -65,12 +66,17 @@ class Validtarget implements ValidationRule, DataAwareRule
         fclose($connection);
 
         // Check if path exists
-        $headers = @get_headers($url);
-        if(!$headers ||
+        try {
+            $headers = get_headers($url);
+        } catch (\Exception $e) {
+            $fail('We could not get the headers for this endpoint. Is the port is open?');
+            return;
+        }
+        if(
             substr($headers[0], 9, 1) === '4' ||
             substr($headers[0], 9, 1) === '5'
         ){
-            if($headers && substr($headers[0], 9, 3) === '403'){
+            if(substr($headers[0], 9, 3) === '403'){
                 $fail('The target must accept our HEAD requests (error 403).');
                 return;
             }
