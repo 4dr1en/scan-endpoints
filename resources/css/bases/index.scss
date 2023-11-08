@@ -15,3 +15,13 @@
 	color: var(--error);
 	list-style: none;
 }
+
+.btn--danger {
+	background-color: var(--error);
+	border: var(--error);
+
+	&:hover {
+		background-color: var(--error-hover);
+		border: var(--error-hover);
+	}
+}
